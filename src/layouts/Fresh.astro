@@ -1,0 +1,225 @@
+---
+import { getCollection } from 'astro:content';
+import type { BrandName } from '../styles/tokens.d.ts';
+import '../styles/tokens.css';
+import '../styles/fresh.css';
+
+interface Props {
+  title: string;
+  description: string;
+  brand?: BrandName | undefined;
+  lang?: 'en' | 'ja' | undefined;
+  alternate?: string | undefined;
+}
+
+const { title, description, brand = 'nonbiri', lang = 'en', alternate } = Astro.props;
+const path = Astro.url.pathname.replace(/(.)\/$/, '$1');
+const root = lang === 'ja' ? '/ja' : '';
+
+const T =
+  lang === 'ja'
+    ? {
+        about: '私について',
+        cv: '職務経歴書',
+        overview: '概要',
+        skip: '本文へ',
+        theme: '表示テーマ',
+        light: '明るい',
+        auto: '自動（時刻に合わせる）',
+        dark: '暗い',
+        language: '言語',
+        untranslated: 'このページの英語版はありません',
+        who: 'イリヤ・スネシコフ',
+        email: 'メール',
+        colophon: '見出しは Didot、本文は OS の書体。JavaScript のバンドルなし。',
+      }
+    : {
+        about: 'About',
+        cv: 'CV',
+        overview: 'Overview',
+        skip: 'Skip to content',
+        theme: 'Colour theme',
+        light: 'Light',
+        auto: 'Auto — light by day, dark in the evening',
+        dark: 'Dark',
+        language: 'Language',
+        untranslated: 'No Japanese version of this page',
+        who: 'Ilia Snezhkov',
+        email: 'Email',
+        colophon: 'Set in Didot and the system sans. No bundled JavaScript.',
+      };
+const fullTitle = title.startsWith('Nonbiri') ? title : `${title} · Nonbiri`;
+
+const [apps, legal] = await Promise.all([getCollection('apps'), getCollection('legal')]);
+const ordered = apps.sort((a, b) => a.data.order - b.data.order);
+const year = new Date().getFullYear();
+
+const docsFor = (app: (typeof ordered)[number]) =>
+  legal
+    .filter((doc) => doc.data.app === app.data.brand && doc.data.lang === 'en')
+    .map((english) => {
+      const translated =
+        lang === 'ja' &&
+        legal.find(
+          (doc) =>
+            doc.data.lang === 'ja' &&
+            doc.data.app === english.data.app &&
+            doc.data.kind === english.data.kind,
+        );
+      return translated
+        ? { title: translated.data.title, href: `/ja/${app.id}/${english.data.kind}` }
+        : { title: english.data.title, href: `/${app.id}/${english.data.kind}` };
+    });
+
+const appHref = (app: (typeof ordered)[number]) =>
+  lang === 'ja' && app.data.ja ? `/ja/${app.id}` : `/${app.id}`;
+
+const THEMES = [
+  { value: 'light', label: T.light, glyph: '☀' },
+  { value: 'auto', label: T.auto, glyph: '◐' },
+  { value: 'dark', label: T.dark, glyph: '☾' },
+] as const;
+
+const other = lang === 'ja' ? 'en' : 'ja';
+const alt = alternate ? { href: alternate, lang: other } : null;
+
+const absolute = (href: string) => new URL(href, Astro.site).href;
+const canonical = absolute(path || '/');
+const englishHref = path.replace(/^\/ja/, '') || '/';
+
+const card =
+  path === `${root}/about` || path === `${root}/cv`
+    ? 'about'
+    : brand === 'nonbiri'
+      ? 'default'
+      : brand;
+const cardUrl = absolute(`/og/${card}.png`);
+
+const LANGS = [
+  { value: 'en', label: 'EN' },
+  { value: 'ja', label: '日本語' },
+] as const;
+---
+
+<html lang={lang} data-brand={brand} data-alt-href={alt?.href} data-alt-lang={alt?.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+
+    <link rel="alternate" hreflang={lang} href={canonical} />
+    {alt && <link rel="alternate" hreflang={alt.lang} href={absolute(alt.href)} />}
+    <link rel="alternate" hreflang="x-default" href={absolute(englishHref)} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nonbiri" />
+    <meta property="og:locale" content={lang === 'ja' ? 'ja_JP' : 'en_GB'} />
+    {alt && <meta property="og:locale:alternate" content={alt.lang === 'ja' ? 'ja_JP' : 'en_GB'} />}
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={cardUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={fullTitle} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={cardUrl} />
+
+    <script src="/lang.js" is:inline></script>
+    <script src="/theme.js" is:inline></script>
+  </head>
+
+  <body>
+    <a class="visually-hidden" href="#main">{T.skip}</a>
+
+    <div class="veil" aria-hidden="true">
+      <div class="veil__washes">
+        <div class="veil__wash veil__wash--a"></div>
+        <div class="veil__wash veil__wash--b"></div>
+      </div>
+      <div class="veil__print"></div>
+      <div class="veil__grain"></div>
+    </div>
+
+    <div class="page">
+      <header class="masthead">
+        <a class="masthead__mark" href={root || '/'}>Nonbiri</a>
+        <div class="masthead__end">
+          <div class="theme" data-theme-switch role="group" aria-label={T.theme}>
+            {THEMES.map((option) => (
+              <button type="button" data-theme-value={option.value} aria-pressed="false">
+                <span aria-hidden="true">{option.glyph}</span>
+                <span class="visually-hidden">{option.label}</span>
+              </button>
+            ))}
+          </div>
+
+          <div class="lang" data-lang-switch role="group" aria-label={T.language}>
+            {LANGS.map((option) =>
+              option.value === lang ? (
+                <span aria-current="true" lang={option.value}>{option.label}</span>
+              ) : alt && alt.lang === option.value ? (
+                <a
+                  href={alt.href}
+                  data-lang-value={option.value}
+                  lang={option.value}
+                  hreflang={option.value}
+                >
+                  {option.label}
+                </a>
+              ) : (
+                <span aria-disabled="true" lang={option.value} title={T.untranslated}>{option.label}</span>
+              ),
+            )}
+          </div>
+
+        <nav class="masthead__nav" aria-label="Primary">
+          {ordered.map((app) => (
+            <a href={appHref(app)} aria-current={path === appHref(app) ? 'page' : undefined}>
+              {lang === 'ja' ? (app.data.ja?.name ?? app.data.name) : app.data.name}
+            </a>
+          ))}
+          <a href={`${root}/about`} aria-current={path === `${root}/about` ? 'page' : undefined}>{T.about}</a>
+          <a href={`${root}/cv`} aria-current={path === `${root}/cv` ? 'page' : undefined}>{T.cv}</a>
+        </nav>
+        </div>
+      </header>
+    </div>
+
+    <main id="main"><slot /></main>
+
+    <div class="page">
+      <footer class="foot">
+        {ordered.map((app) => (
+          <div>
+            <h2>{lang === 'ja' ? (app.data.ja?.name ?? app.data.name) : app.data.name}</h2>
+            <ul>
+              <li><a href={appHref(app)}>{T.overview}</a></li>
+              {docsFor(app).map((doc) => (
+                <li><a href={doc.href}>{doc.title}</a></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <div>
+          <h2>{T.who}</h2>
+          <ul>
+            <li><a href={`${root}/about`}>{T.about}</a></li>
+            <li><a href={`${root}/cv`}>{T.cv}</a></li>
+            <li><a href="https://github.com/iasnezhkov">GitHub</a></li>
+            <li><a href="mailto:iasnezhkov@gmail.com">{T.email}</a></li>
+          </ul>
+        </div>
+        <p class="foot__end">
+          <span>{T.colophon}</span>
+          <span class="ja">のんびり · © {year} {T.who}</span>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

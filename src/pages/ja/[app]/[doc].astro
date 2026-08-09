@@ -1,0 +1,71 @@
+---
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import Fresh from '../../../layouts/Fresh.astro';
+
+interface Props {
+  app: CollectionEntry<'apps'>;
+  doc: CollectionEntry<'legal'>;
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const [apps, legal] = await Promise.all([getCollection('apps'), getCollection('legal')]);
+  return legal
+    .filter((doc) => doc.data.lang === 'ja')
+    .flatMap((doc) => {
+      const app = apps.find((entry) => entry.id === doc.data.app);
+      if (!app) return [];
+      return [{ params: { app: app.id, doc: doc.data.kind }, props: { app, doc } }];
+    });
+};
+
+const { app, doc } = Astro.props;
+const { Content, headings } = await render(doc);
+const contents = headings.filter((heading) => heading.depth === 2);
+const name = app.data.ja?.name ?? app.data.name;
+
+const dateFormat = new Intl.DateTimeFormat('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Fresh
+  title={`${doc.data.title} — ${name}`}
+  description={`${name}の${doc.data.title}。`}
+  brand={app.data.brand}
+  lang="ja"
+  alternate={`/${app.id}/${doc.data.kind}`}
+>
+  <div class="page">
+    <section class="spread--tight">
+      <p class="micro micro--accent">{name}</p>
+      <h1 class="mag-2 mt-md">{doc.data.title}</h1>
+      <p class="micro mt-lg">
+        <time datetime={doc.data.effectiveDate.toISOString()}>
+          {dateFormat.format(doc.data.effectiveDate)}
+        </time>
+        <span> 発効 · バージョン {doc.data.version}</span>
+      </p>
+    </section>
+
+    <section class="spread--tight doc">
+      {contents.length > 2 && (
+        <nav class="contents" aria-label={`${doc.data.title}の目次`}>
+          <p class="micro">目次</p>
+          <ol class="contents__list">
+            {contents.map((heading) => (
+              <li><a class="link" href={`#${heading.slug}`}>{heading.text}</a></li>
+            ))}
+          </ol>
+        </nav>
+      )}
+
+      <div class="prose-doc"><Content /></div>
+
+      <p class="mt-xl"><a class="link link--lone" href={`/ja/${app.id}`}>{name}のページへ戻る</a></p>
+    </section>
+  </div>
+</Fresh>

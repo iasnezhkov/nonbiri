@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+import Shot from '../components/Shot.astro';
+import Fresh from '../layouts/Fresh.astro';
+
+const apps = (await getCollection('apps'))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((app) => ({ app, hero: app.data.shots[app.data.hero] ?? app.data.shots[0] }));
+
+const STATUS = {
+  'in-development': 'In development',
+  testing: 'Final testing',
+  released: 'Available',
+} as const;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Nonbiri',
+  alternateName: 'のんびり',
+  url: 'https://nonbiri.dev/',
+  inLanguage: 'en',
+  publisher: {
+    '@type': 'Person',
+    name: 'Ilia Snezhkov',
+    url: 'https://nonbiri.dev/about',
+    sameAs: ['https://github.com/iasnezhkov', 'https://linkedin.com/in/iasnezhkov'],
+  },
+};
+---
+
+<Fresh
+  title="Nonbiri — apps for studying Japanese and Japan’s driving test"
+  description="Two apps by Ilia Snezhkov: Suji, for studying Japanese, and Gokaku, an offline trainer for Japan’s written driving exams."
+  alternate="/ja"
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+  <div class="page">
+    <section class="opener">
+      <div class="opener__field"></div>
+      <div class="opener__spine vertical vertical--huge mincho" lang="ja" aria-hidden="true">日々是好日</div>
+
+      <div class="opener__type">
+        <p class="micro micro--accent">Nonbiri — のんびり — a one-person studio</p>
+        <h1 class="mag-1 mt-md">Small apps,<br /><em>unhurried</em>.</h1>
+
+        <p class="micro mt-xl">
+          <a class="link" href="/ja" data-lang-value="ja" lang="ja" hreflang="ja">日本語版があります</a>
+        </p>
+      </div>
+    </section>
+  </div>
+
+  {apps.map(({ app, hero }, index) => (
+    <div class="page">
+      <section class="spread grid">
+        <div class={index % 2 === 0 ? 'col-c' : 'col-d'}>
+          <p class="micro micro--accent">{String(index + 1).padStart(2, '0')} — {STATUS[app.data.status]}</p>
+          <a href={`/${app.id}`}>
+            <h2 class="mag-2 mt-md">
+              {app.data.name}
+              {app.data.kanji && <span class="mincho"> {app.data.kanji}</span>}
+            </h2>
+          </a>
+          <p class="mag-3 mt-lg">{app.data.tagline}</p>
+          <p class="note mt-xl">{app.data.summary}</p>
+          <p class="micro mt-lg">{app.data.platforms.join(' · ')}</p>
+        </div>
+
+        {hero && (
+          <figure
+            class:list={[
+              index % 2 === 0 ? 'col-d' : 'col-c',
+              'plate',
+              hero.device === 'iphone' ? 'plate--phone' : 'plate--pad',
+              hero.framed ? 'plate--framed' : 'plate--bare',
+            ]}
+          >
+            <input class="plate__toggle" type="checkbox" id={`shot-${app.id}`} />
+            <label class="plate__open" for={`shot-${app.id}`}>
+              <Shot src={hero.src} srcDark={hero.srcDark} alt={hero.alt} width={900} eager={index === 0} />
+            </label>
+            <label class="plate__zoom" for={`shot-${app.id}`} aria-label="Close">
+              <Shot
+                src={hero.src}
+                srcDark={hero.srcDark}
+                alt={hero.alt}
+                width={hero.src.width}
+                decorative
+              />
+            </label>
+          </figure>
+        )}
+      </section>
+    </div>
+  ))}
+
+  <section class="statement">
+    <div class="page">
+      <p class="micro">Who makes them</p>
+      <p class="statement__t mt-lg">
+        I’m <a class="link" href="/about">Ilia Snezhkov</a>, a backend and platform engineer.
+      </p>
+      <p class="note mt-xl">
+        My working hours go to application security — the platforms that put scanning and
+        triage inside the pipelines teams already use. The apps happen outside them, which
+        is why each covers a narrow slice thoroughly rather than everything at once: that
+        is the size one person actually finishes.
+      </p>
+    </div>
+  </section>
+</Fresh>

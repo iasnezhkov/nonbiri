@@ -1,0 +1,111 @@
+---
+import Fresh from '../../layouts/Fresh.astro';
+import { profile, experience, isTranslated, skills, projects, education, languages, jaMonth } from '../../data/cv.ts';
+
+const roles = experience.filter(isTranslated);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.ja.name,
+  alternateName: profile.name,
+  email: `mailto:${profile.email}`,
+  url: profile.links.site,
+  jobTitle: profile.ja.headline,
+  description: profile.ja.summary,
+  sameAs: [profile.links.github, profile.links.linkedin],
+  knowsLanguage: languages.map((l) => l.ja.name),
+  alumniOf: { '@type': 'CollegeOrUniversity', name: education.ja.institution },
+};
+---
+
+<Fresh
+  title="イリヤ・スネシコフ — 職務経歴書"
+  description={`${profile.ja.name} — ${profile.ja.headline}、${profile.ja.specialisation}を専門としています。`}
+  lang="ja"
+  alternate="/cv"
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+
+  <div class="page">
+    <article class="cv">
+      <header class="cv__head">
+        <p class="micro no-print">職務経歴書</p>
+        <h1 class="cv__name">{profile.ja.name}</h1>
+        <p class="cv__headline">{profile.ja.headline} · {profile.ja.specialisation}</p>
+
+        <ul class="cv__contact">
+          <li><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
+          <li><a href={profile.links.site}>nonbiri.dev</a></li>
+          <li><a href={profile.links.github}>github.com/iasnezhkov</a></li>
+          <li><a href={profile.links.linkedin}>linkedin.com/in/iasnezhkov</a></li>
+        </ul>
+
+        <p class="cv__summary">{profile.ja.summary}</p>
+        <p class="mt-lg no-print"><a class="link link--lone" href="/cv.pdf">PDF をダウンロード（英語）</a></p>
+      </header>
+
+      <section class="cv__section">
+        <h2 class="cv__h2">職務経歴</h2>
+        {roles.map((role) => (
+          <section class="cv__role">
+            <header class="cv__role-head">
+              <h3 class="cv__role-title">{role.ja.title} — {role.company}</h3>
+              <p class="cv__role-meta">
+                {jaMonth(role.fromDate)} – {role.toDate ? jaMonth(role.toDate) : '現在'} · {role.ja.location}
+              </p>
+            </header>
+            {role.ja.scope && <p class="cv__role-scope">{role.ja.scope}</p>}
+            {role.ja.context && <p class="cv__role-context">{role.ja.context}</p>}
+            <p class="cv__role-summary">{role.ja.summary}</p>
+            {role.ja.highlights.length > 0 && (
+              <ul class="cv__list">{role.ja.highlights.map((item) => <li>{item}</li>)}</ul>
+            )}
+            <p class="cv__tech">{role.tech.join(' · ')}</p>
+          </section>
+        ))}
+      </section>
+
+      <section class="cv__section">
+        <h2 class="cv__h2">技術スタック</h2>
+        <dl class="cv__skills">
+          {skills.map((skill) => (
+            <div class="cv__skill"><dt>{skill.ja.label}</dt><dd>{skill.ja.value}</dd></div>
+          ))}
+        </dl>
+      </section>
+
+      <section class="cv__section">
+        <h2 class="cv__h2">個人開発</h2>
+        {projects.map((project) => (
+          <section class="cv__role">
+            <h3 class="cv__role-title">{project.ja.name}</h3>
+            <p class="cv__role-summary">{project.ja.summary}</p>
+            <p class="cv__tech">{project.tech.join(' · ')}</p>
+          </section>
+        ))}
+      </section>
+
+      <section class="cv__section">
+        <h2 class="cv__h2">学歴</h2>
+        <section class="cv__role">
+          <header class="cv__role-head">
+            <h3 class="cv__role-title">{education.ja.institution}</h3>
+            <p class="cv__role-meta">
+              {education.from.slice(-4)}年 – {education.to.slice(-4)}年 · {education.ja.location}
+            </p>
+          </header>
+          <p class="cv__role-summary">{education.ja.degree} — {education.ja.field}</p>
+          <p class="cv__role-context">{education.ja.notes}</p>
+        </section>
+      </section>
+
+      <section class="cv__section">
+        <h2 class="cv__h2">語学</h2>
+        <p class="cv__role-summary">
+          {languages.map((l) => `${l.ja.name} — ${l.ja.level}`).join(' · ')}
+        </p>
+      </section>
+    </article>
+  </div>
+</Fresh>

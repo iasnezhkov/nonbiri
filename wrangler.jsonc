@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "nonbiri",
+  "compatibility_date": "2026-08-09",
+
+  // No `main`: nothing here runs server-side. The Worker exists only to serve
+  // what `astro build` put in dist/, with the headers from public/_headers.
+  //
+  // `404-page` serves the nearest 404.html walking up the tree, which is what
+  // the nested-404 integration in astro.config.mjs depends on: a miss under
+  // /ja/ has to reach the Japanese page, not the English one at the root.
+  // Serve /suji, not /suji/. The default redirects the other way, which costs a
+  // 307 on every internal link and leaves each canonical, hreflang and sitemap
+  // entry pointing at a URL that redirects — all of them are written without
+  // the trailing slash.
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}

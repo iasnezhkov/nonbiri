@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import Fresh from '../../layouts/Fresh.astro';
+import { isTranslated } from '../../lib/apps.ts';
+
+const apps = (await getCollection('apps'))
+  .filter(isTranslated)
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<Fresh
+  title="ページがありません"
+  description="そのページは nonbiri.dev にありません。"
+  lang="ja"
+  alternate="/404"
+>
+  <section class="lost">
+    <div class="lost__spine vertical vertical--huge mincho" aria-hidden="true">迷子</div>
+
+    <div class="page lost__page">
+      <p class="micro">のんびり — ページが見つかりません</p>
+      <p class="lost__n mt-md" aria-hidden="true">404</p>
+      <h1 class="visually-hidden">404 — ページが見つかりません</h1>
+
+      <p class="note lost__read mt-lg">アドレスは合っていますが、そのページはありません。このサイトでは最近ページを移していないので、入力の誤りか、もともと正しくないリンクだと思われます。</p>
+
+      <nav class="lost__index mt-2xl" aria-label="かわりに行ける場所">
+        {apps.map((app, index) => (
+          <a href={`/ja/${app.id}`}>
+            <b>{String(index + 1).padStart(2, '0')}</b>
+            <span>{app.data.ja.name}<em>{app.data.ja.tagline}</em></span>
+          </a>
+        ))}
+        <a href="/ja">
+          <b>—</b>
+          <span>トップ<em>2つのアプリと、このスタジオについて</em></span>
+        </a>
+      </nav>
+    </div>
+  </section>
+</Fresh>

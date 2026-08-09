@@ -1,0 +1,105 @@
+---
+import { getCollection } from 'astro:content';
+import Fresh from '../../layouts/Fresh.astro';
+import { isTranslated } from '../../lib/apps.ts';
+import Shot from '../../components/Shot.astro';
+
+const apps = (await getCollection('apps'))
+  .filter(isTranslated)
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((app) => ({ app, hero: app.data.shots[app.data.hero] ?? app.data.shots[0] }));
+
+const STATUS = {
+  'in-development': '開発中',
+  testing: '最終テスト中',
+  released: '公開中',
+} as const;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Nonbiri',
+  alternateName: 'のんびり',
+  url: 'https://nonbiri.dev/',
+  inLanguage: 'ja',
+  publisher: {
+    '@type': 'Person',
+    name: 'Ilia Snezhkov',
+    url: 'https://nonbiri.dev/about',
+    sameAs: ['https://github.com/iasnezhkov', 'https://linkedin.com/in/iasnezhkov'],
+  },
+};
+---
+
+<Fresh
+  title="Nonbiri — 日本語学習と運転免許学科試験のアプリ"
+  description="イリヤ・スネシコフによる2つのアプリ。日本語学習のための「筋」と、日本の運転免許学科試験のための「合格」。"
+  lang="ja"
+  alternate="/"
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+  <div class="page">
+    <section class="opener">
+      <div class="opener__field"></div>
+      <div class="opener__spine vertical vertical--huge mincho" aria-hidden="true">日々是好日</div>
+
+      <div class="opener__type">
+        <p class="micro micro--accent">Nonbiri — のんびり — 個人スタジオ</p>
+        <h1 class="mag-1 mag-1--cjk mt-md">小さなアプリを、<br />いそがずに。</h1>
+      </div>
+    </section>
+  </div>
+
+  {apps.map(({ app, hero }, index) => (
+    <div class="page">
+      <section class="spread grid">
+        <div class={index % 2 === 0 ? 'col-c' : 'col-d'}>
+          <p class="micro micro--accent">
+            {String(index + 1).padStart(2, '0')} — {STATUS[app.data.status]}
+          </p>
+          <a href={`/ja/${app.id}`}>
+            <h2 class="mag-2 mt-md">{app.data.ja.name}</h2>
+          </a>
+          <p class="mag-3 mt-lg">{app.data.ja.tagline}</p>
+          <p class="note mt-xl">{app.data.ja.summary}</p>
+          <p class="micro mt-lg">{app.data.platforms.join(' · ')}</p>
+        </div>
+
+        {hero && (
+          <figure
+            class:list={[
+              index % 2 === 0 ? 'col-d' : 'col-c',
+              'plate',
+              hero.device === 'iphone' ? 'plate--phone' : 'plate--pad',
+              hero.framed ? 'plate--framed' : 'plate--bare',
+            ]}
+          >
+            <input class="plate__toggle" type="checkbox" id={`shot-${app.id}`} />
+            <label class="plate__open" for={`shot-${app.id}`}>
+              <Shot src={hero.src} srcDark={hero.srcDark} alt={hero.alt} width={900} eager={index === 0} />
+            </label>
+            <label class="plate__zoom" for={`shot-${app.id}`} aria-label="閉じる">
+              <Shot
+                src={hero.src}
+                srcDark={hero.srcDark}
+                alt={hero.alt}
+                width={hero.src.width}
+                decorative
+              />
+            </label>
+          </figure>
+        )}
+      </section>
+    </div>
+  ))}
+
+  <section class="statement">
+    <div class="page">
+      <p class="micro">つくっている人</p>
+      <p class="statement__t mt-lg">
+        イリヤ・スネシコフといいます。バックエンドとプラットフォームのエンジニアです。
+      </p>
+      <p class="note mt-xl">本業はアプリケーションセキュリティ——開発チームがすでに使っているパイプラインのなかに、検査とトリアージを入れる仕事です。アプリはその時間の外でつくっているので、あれもこれもではなく、狭い範囲を丁寧に扱うつくりになっています。ひとりで最後まで終えられるのは、それくらいの大きさです。</p>
+    </div>
+  </section>
+</Fresh>

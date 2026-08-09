@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Least privilege by default; no job here writes anything back to the repo.
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # `npm run check` is three gates, and CI used to invoke two of them
+      # directly — which silently skipped the third the day it was added:
+      #   · tokens.css/.d.ts have not drifted from tokens.json (both committed)
+      #   · every class a page uses is defined in the stylesheet
+      #   · astro check
+      - name: Check
+        run: npm run check
+
+      - name: Build
+        run: npx astro build
+
+      - name: Check for unexpected client-side JavaScript
+        # The site ships one hand-written script (theme.js) and no framework
+        # runtime. A bundled component sneaking in should be a deliberate choice,
+        # not something noticed months later in a Lighthouse report.
+        run: |
+          if ls dist/_astro/*.js >/dev/null 2>&1; then
+            echo "::error::Unexpected bundled JS in dist/_astro — the site is meant to ship none."
+            ls -la dist/_astro/*.js
+            exit 1
+          fi
+          echo "No bundled client JS, as expected."

@@ -1,0 +1,67 @@
+# Nonbiri
+
+> A one-person studio by Ilia Snezhkov, building two apps for people dealing with
+> Japan: Suji, for studying the language, and Gokaku, for the written driving-licence
+> exam. The site is also his professional record. Every page exists in English at the
+> root and in Japanese under /ja.
+
+Neither app has shipped yet. Suji is in development, Gokaku is in final testing, and
+there are no store links on the site — the pages carry a mail link instead. Treat any
+claim that either is downloadable as incorrect.
+
+## Suji (筋) — /suji
+
+A Japanese study app for iPadOS, iOS and macOS. Dictionary, kanji, grammar, reading,
+exam practice and spaced repetition in one offline-first native app, all running on a
+single progress record rather than one score per drill. A separate six-section teacher
+interface sits on the same data: class register with at-risk grouping, homework builder
+and marking queue, RFC 5545 lesson scheduling, chat, and an authorable library.
+
+Bundled, not fetched: 13,108 kanji (6,703 with stroke-order animation), 31,151
+dictionary entries, 684 grammar patterns, 613,270 proper-name readings. Handwriting is
+scored against KanjiVG with dynamic time warping, reading Apple Pencil pressure, tilt
+and azimuth on a Metal canvas. Repetition is FSRS-5. Exam practice covers JLPT,
+NAT-TEST, J.TEST and JFT-Basic with per-section scoring. Built in Swift 6 under strict
+concurrency across roughly forty modules; local SQLite reconciles to Supabase through
+an outbox queue. Not available for Android.
+
+## Gokaku (合格) — /gokaku
+
+A free offline trainer for Japan's written driving exams — 仮免, 本免 and 外免切替 (the
+foreign-licence conversion check, which since 1 October 2025 is 50 true/false questions
+in 30 minutes with a 45 pass mark). iOS and Android.
+
+774 true/false questions, every one carrying a verbatim quote from the 教則, the
+National Police Agency rulebook the real exam is written from, with the chapter
+reference. The bank is machine-verified against a pinned corpus — the 49th revision of
+13 November 2024 — so a quote that stops matching flags itself. 208 official sign images
+with 133 questions built on them. Each question is tagged with one of seven trap types
+and accuracy is tracked per trap. Twelve languages: English, Russian, Japanese, Chinese,
+Korean, Vietnamese, Portuguese, Spanish, Filipino, Nepali, Indonesian, Burmese.
+
+No server, no account, no analytics, no ads. The App Privacy label reads Data Not
+Collected. It is independent and unofficial, with no connection to the 警察庁, the
+国土交通省, any prefectural licence centre or any driving school.
+
+## Ilia Snezhkov — /about, /cv
+
+Senior software engineer, backend and platform, specialising in application security.
+Seven years of Python across startups, a high-traffic consumer product, a bank and a
+telecom group. Has built a company-wide application-security platform from scratch at
+two companies and led the technical side of both. Current work covers scanners in
+GitLab CI, container image scanning across Kubernetes clusters, CVE prioritisation
+driven by exploitation signals, and automated remediation. Contact: iasnezhkov@gmail.com.
+
+## Pages
+
+- [Home](https://nonbiri.dev/): both apps, and who makes them
+- [Suji](https://nonbiri.dev/suji): features, figures, screenshots, how it is built
+- [Gokaku](https://nonbiri.dev/gokaku): the same, plus one worked exam question with its citation
+- [About](https://nonbiri.dev/about): short professional read
+- [CV](https://nonbiri.dev/cv): full record, also at /cv.pdf
+- [Japanese edition](https://nonbiri.dev/ja): every page above, translated
+
+## Optional
+
+- [Suji privacy](https://nonbiri.dev/suji/privacy) and [support](https://nonbiri.dev/suji/support)
+- [Gokaku privacy](https://nonbiri.dev/gokaku/privacy), [terms](https://nonbiri.dev/gokaku/terms) and [support](https://nonbiri.dev/gokaku/support)

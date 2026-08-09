@@ -1,0 +1,30 @@
+# Cloudflare Pages response headers.
+#
+# The CSP has no 'unsafe-inline' and no external origins because the site ships
+# no inline scripts, no third-party scripts and no remote fonts. If a future
+# change needs one of those, the right fix is to remove the need — not to widen
+# this policy.
+
+/*
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'none'; frame-ancestors 'none'; base-uri 'none'; manifest-src 'self'; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  X-Frame-Options: DENY
+
+# Astro emits content-hashed assets to /_astro/, not /assets/. The rule below
+# used the latter and therefore matched nothing: every hashed file was served
+# with no long cache at all.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Social cards and the CV are stable but not content-hashed, so they get a
+# shorter life and must be revalidated.
+/og/*
+  Cache-Control: public, max-age=604800
+
+/cv.pdf
+  Cache-Control: public, max-age=86400

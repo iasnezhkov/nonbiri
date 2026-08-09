@@ -1,0 +1,108 @@
+---
+import Fresh from '../layouts/Fresh.astro';
+import { profile, experience, skills, projects, education, languages } from '../data/cv.ts';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: profile.name,
+  email: `mailto:${profile.email}`,
+  url: profile.links.site,
+  jobTitle: profile.headline,
+  description: profile.summary,
+  sameAs: [profile.links.github, profile.links.linkedin],
+  knowsLanguage: languages.map((l) => l.name),
+  alumniOf: { '@type': 'CollegeOrUniversity', name: education.institution },
+  hasOccupation: experience.map((role) => ({
+    '@type': 'Occupation',
+    name: role.title,
+    occupationLocation: { '@type': 'Place', name: role.location },
+  })),
+};
+---
+
+<Fresh
+  title="Ilia Snezhkov — CV, application security engineer"
+  description={`${profile.name} — ${profile.headline}, specialising in ${profile.specialisation}.`}
+  alternate="/ja/cv"
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+
+  <div class="page">
+    <article class="cv">
+      <header class="cv__head">
+        <p class="micro no-print">Curriculum vitae</p>
+        <h1 class="cv__name">{profile.name}</h1>
+        <p class="cv__headline">{profile.headline} · {profile.specialisation}</p>
+
+        <ul class="cv__contact">
+          <li><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
+          <li><a href={profile.links.site}>nonbiri.dev</a></li>
+          <li><a href={profile.links.github}>github.com/iasnezhkov</a></li>
+          <li><a href={profile.links.linkedin}>linkedin.com/in/iasnezhkov</a></li>
+        </ul>
+
+        <p class="cv__summary">{profile.summary}</p>
+        <p class="mt-lg no-print"><a class="link link--lone" href="/cv.pdf">Download as PDF</a></p>
+      </header>
+
+      <section class="cv__section">
+        <h2 class="cv__h2">Experience</h2>
+        {experience.map((role) => (
+          <section class="cv__role">
+            <header class="cv__role-head">
+              <h3 class="cv__role-title">{role.title} — {role.company}</h3>
+              <p class="cv__role-meta">{role.from} – {role.to} · {role.location}</p>
+            </header>
+            {role.scope && <p class="cv__role-scope">{role.scope}</p>}
+            {role.context && <p class="cv__role-context">{role.context}</p>}
+            <p class="cv__role-summary">{role.summary}</p>
+            {role.highlights.length > 0 && (
+              <ul class="cv__list">{role.highlights.map((item) => <li>{item}</li>)}</ul>
+            )}
+            <p class="cv__tech">{role.tech.join(' · ')}</p>
+          </section>
+        ))}
+      </section>
+
+      <section class="cv__section">
+        <h2 class="cv__h2">Technical skills</h2>
+        <dl class="cv__skills">
+          {skills.map((skill) => (
+            <div class="cv__skill"><dt>{skill.label}</dt><dd>{skill.value}</dd></div>
+          ))}
+        </dl>
+      </section>
+
+      <section class="cv__section">
+        <h2 class="cv__h2">Personal projects</h2>
+        {projects.map((project) => (
+          <section class="cv__role">
+            <h3 class="cv__role-title">{project.name}</h3>
+            <p class="cv__role-summary">{project.summary}</p>
+            <p class="cv__tech">{project.tech.join(' · ')}</p>
+          </section>
+        ))}
+      </section>
+
+      <section class="cv__section">
+        <h2 class="cv__h2">Education</h2>
+        <section class="cv__role">
+          <header class="cv__role-head">
+            <h3 class="cv__role-title">{education.institution}</h3>
+            <p class="cv__role-meta">{education.from} – {education.to} · {education.location}</p>
+          </header>
+          <p class="cv__role-summary">{education.degree} — {education.field}</p>
+          <p class="cv__role-context">{education.notes}</p>
+        </section>
+      </section>
+
+      <section class="cv__section">
+        <h2 class="cv__h2">Languages</h2>
+        <p class="cv__role-summary">
+          {languages.map((l) => `${l.name} — ${l.level}`).join(' · ')}
+        </p>
+      </section>
+    </article>
+  </div>
+</Fresh>

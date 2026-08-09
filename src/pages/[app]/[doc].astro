@@ -1,0 +1,73 @@
+---
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import Fresh from '../../layouts/Fresh.astro';
+
+interface Props {
+  app: CollectionEntry<'apps'>;
+  doc: CollectionEntry<'legal'>;
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const [apps, legal] = await Promise.all([getCollection('apps'), getCollection('legal')]);
+  return legal
+    .filter((doc) => doc.data.lang === 'en')
+    .flatMap((doc) => {
+      const app = apps.find((entry) => entry.id === doc.data.app);
+      if (!app) return [];
+      return [{ params: { app: app.id, doc: doc.data.kind }, props: { app, doc } }];
+    });
+};
+
+const { app, doc } = Astro.props;
+const translated = (await getCollection('legal')).some(
+  (entry) => entry.data.lang === 'ja' && entry.data.app === doc.data.app && entry.data.kind === doc.data.kind,
+);
+const { Content, headings } = await render(doc);
+const contents = headings.filter((heading) => heading.depth === 2);
+
+const dateFormat = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<Fresh
+  title={`${doc.data.title} — ${app.data.name}`}
+  description={`${doc.data.title} for ${app.data.name}.`}
+  brand={app.data.brand}
+  alternate={translated ? `/ja/${app.id}/${doc.data.kind}` : undefined}
+>
+  <div class="page">
+    <section class="spread--tight">
+      <p class="micro micro--accent">{app.data.name}</p>
+      <h1 class="mag-2 mt-md">{doc.data.title}</h1>
+      <p class="micro mt-lg">
+        <span>Effective </span>
+        <time datetime={doc.data.effectiveDate.toISOString()}>
+          {dateFormat.format(doc.data.effectiveDate)}
+        </time>
+        <span> · Version {doc.data.version}</span>
+      </p>
+    </section>
+
+    <section class="spread--tight doc">
+      {contents.length > 2 && (
+        <nav class="contents" aria-label={`Contents of ${doc.data.title}`}>
+          <p class="micro">Contents</p>
+          <ol class="contents__list">
+            {contents.map((heading) => (
+              <li><a class="link" href={`#${heading.slug}`}>{heading.text}</a></li>
+            ))}
+          </ol>
+        </nav>
+      )}
+
+      <div class="prose-doc"><Content /></div>
+
+      <p class="mt-xl"><a class="link link--lone" href={`/${app.id}`}>Back to {app.data.name}</a></p>
+    </section>
+  </div>
+</Fresh>

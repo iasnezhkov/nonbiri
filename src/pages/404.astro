@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import Fresh from '../layouts/Fresh.astro';
+
+const apps = (await getCollection('apps')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Fresh title="Not found" description="That page does not exist on nonbiri.dev." alternate="/ja/404">
+  <section class="lost">
+    <div class="lost__spine vertical vertical--huge mincho" aria-hidden="true">迷子</div>
+
+    <div class="page lost__page">
+      <p class="micro">Nonbiri — page not found</p>
+      <p class="lost__n mt-md" aria-hidden="true">404</p>
+      <h1 class="visually-hidden">404 — page not found</h1>
+
+      <p class="note lost__read mt-lg">
+        The address is right, the page is not. Nothing here has moved recently, so
+        this is most likely a typo or a link that was never correct.
+      </p>
+
+      <nav class="lost__index mt-2xl" aria-label="Where to go instead">
+        {apps.map((app, index) => (
+          <a href={`/${app.id}`}>
+            <b>{String(index + 1).padStart(2, '0')}</b>
+            <span>{app.data.name}<em>{app.data.tagline}</em></span>
+          </a>
+        ))}
+        <a href="/">
+          <b>—</b>
+          <span>Home<em>Both apps, and what the studio is</em></span>
+        </a>
+      </nav>
+    </div>
+  </section>
+</Fresh>

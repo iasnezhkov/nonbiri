@@ -1,0 +1,37 @@
+{
+  "name": "nonbiri",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "nonbiri.dev — Ilia Snezhkov: Suji and Gokaku",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "scripts": {
+    "dev": "npm run tokens && astro dev",
+    "build": "npm run tokens && astro build",
+    "preview": "astro preview",
+    "tokens": "node scripts/build-tokens.ts",
+    "check": "npm run tokens -- --check && node scripts/check-classes.ts && node scripts/check-language.ts && node scripts/check-artefacts.ts && astro check",
+    "astro": "astro",
+    "cv:pdf": "npm run build && node scripts/build-cv-pdf.ts --check",
+    "og": "node scripts/build-og.ts",
+    "shoot": "node scripts/shoot.ts",
+    "theme": "node scripts/theme-check.ts",
+    "classes": "node scripts/check-classes.ts",
+    "artefacts": "node scripts/check-artefacts.ts"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.2.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/node": "^26.2.0",
+    "playwright": "^1.62.1",
+    "typescript": "6.0.3"
+  }
+}

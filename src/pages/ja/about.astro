@@ -1,0 +1,155 @@
+---
+import Fresh from '../../layouts/Fresh.astro';
+import { profile, experience, isTranslated, earlier, skills, projects, education, languages } from '../../data/cv.ts';
+
+const featured = experience.filter(isTranslated).filter((role) => role.featured);
+const rest = experience.filter((role) => !role.featured);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  inLanguage: 'ja',
+  mainEntity: {
+    '@type': 'Person',
+    name: profile.ja.name,
+    alternateName: profile.name,
+    jobTitle: profile.ja.headline,
+    description: profile.ja.summary,
+    url: 'https://nonbiri.dev/ja/about',
+    email: `mailto:${profile.email}`,
+    sameAs: [profile.links.github, profile.links.linkedin],
+    knowsAbout: skills.map((skill) => skill.ja.label),
+    alumniOf: { '@type': 'CollegeOrUniversity', name: education.ja.institution },
+  },
+};
+---
+
+<Fresh
+  title="イリヤ・スネシコフ — バックエンド・プラットフォームエンジニア"
+  description="イリヤ・スネシコフ — アプリケーションセキュリティを専門とする、バックエンド・プラットフォームエンジニア。"
+  lang="ja"
+  alternate="/about"
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+  <div class="page">
+    <section class="opener">
+      <div class="opener__field"></div>
+      <div class="opener__spine vertical vertical--huge mincho" aria-hidden="true">脆弱性</div>
+
+      <div class="opener__type">
+        <p class="micro micro--accent">私について</p>
+        <h1 class="mag-1 mag-1--cjk mt-md">イリヤ<br />スネシコフ</h1>
+        <p class="mag-3 mt-lg">アプリケーションセキュリティを専門とする、バックエンド・プラットフォームエンジニア。</p>
+        <p class="read mt-xl">Python 歴 7 年。スタートアップ、大規模トラフィックのコンシューマ向け製品、銀行、そして現在は通信グループで開発しています。</p>
+        <ul class="tags mt-xl">
+          <li><a class="link" href="/ja/cv">職務経歴書</a></li>
+          <li><a class="link" href="/cv.pdf">PDF（英語）</a></li>
+          <li><a class="link" href={profile.links.github}>GitHub</a></li>
+          <li><a class="link" href={profile.links.linkedin}>LinkedIn</a></li>
+          <li><a class="link" href={`mailto:${profile.email}`}>メール</a></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <section class="statement statement--soft">
+    <div class="page">
+      <p class="micro">していること</p>
+      <p class="statement__t mt-lg">セキュリティのスキャンとトリアージを、開発チームがすでに使っているパイプラインの中に置くための社内基盤をつくっています。</p>
+      <p class="note mt-xl">アプリケーションセキュリティ基盤を 2 社でゼロから立ち上げました。実際の仕事は、コードがすでに置かれている場所でスキャナを動かすこと、そしてスキャナが返すものを対応する価値のある検知だけに絞り込むことです。</p>
+    </div>
+  </section>
+
+  <div class="page">
+    <section class="spread">
+      <p class="micro">職務経歴</p>
+      <div class="entries mt-2xl">
+        {
+          featured.map((role, index) => (
+            <article class="entry">
+              <div class="entry__n">{String(index + 1).padStart(2, '0')}</div>
+              <div class="entry__t">
+                <h2 class="mag-3">{role.company}</h2>
+                <p class="micro mt-sm">{role.ja.scope ?? role.ja.title}</p>
+              </div>
+              <p class="entry__b note">{role.ja.summary}</p>
+            </article>
+          ))
+        }
+        <article class="entry">
+          <div class="entry__n">{String(featured.length + 1).padStart(2, '0')}</div>
+          <div class="entry__t">
+            <h2 class="mag-3">{earlier.ja.title}</h2>
+            <p class="micro mt-sm">{rest.map((role) => role.company).join(' · ')}</p>
+          </div>
+          <p class="entry__b note">{earlier.ja.summary}</p>
+        </article>
+      </div>
+      <p class="mt-2xl"><a class="link link--lone" href="/ja/cv">日付と詳細を含む全職歴 — 職務経歴書</a></p>
+    </section>
+  </div>
+
+  <div class="page">
+    <section class="spread">
+      <p class="micro">技術スタック</p>
+      <div class="figures mt-2xl">
+        {
+          skills.map((skill) => (
+            <div class="figures__group">
+              <div class="figures__name">{skill.ja.label}</div>
+              <div class="figures__items">
+                <p class="read">{skill.ja.value}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="spread">
+      <p class="micro">アプリ</p>
+      <p class="read mt-lg"><a class="link" href="/ja">のんびり</a>という個人スタジオで、筋と合格の 2 つのアプリをつくっています。どちらもコンテンツのパイプラインから画面まで、すべて自分で手がけています。</p>
+      <div class="entries mt-2xl">
+        {
+          projects.map((project, index) => (
+            <article class="entry">
+              <div class="entry__n">{String(index + 1).padStart(2, '0')}</div>
+              <div class="entry__t">
+                <h2 class="mag-3"><a class="link" href={project.ja.href}>{project.ja.name}</a></h2>
+                <p class="micro mt-sm">{project.tech.join(' · ')}</p>
+              </div>
+              <p class="entry__b note">{project.ja.summary}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="spread grid">
+      <div class="col-c">
+        <p class="micro">学歴</p>
+        <p class="read mt-lg">
+          {`${education.ja.institution}（${education.ja.location}） — ${education.ja.field}、${education.ja.degree}、${education.from.slice(-4)}〜${education.to.slice(-4)} 年。`}
+        </p>
+        <p class="note mt-md">{education.ja.notes}</p>
+      </div>
+      <div class="col-d">
+        <p class="micro">語学</p>
+        <p class="read mt-lg">
+          {languages.map((language) => `${language.ja.name} — ${language.ja.level}`).join(' · ')}
+        </p>
+      </div>
+    </section>
+
+    <section class="spread">
+      <p class="micro">ご連絡</p>
+      <p class="mag-3 mt-lg"><a class="link" href={`mailto:${profile.email}`}>{profile.email}</a></p>
+      <ul class="tags mt-xl">
+        <li><a class="link" href="/ja/cv">職務経歴書</a></li>
+        <li><a class="link" href="/cv.pdf">PDF をダウンロード（英語）</a></li>
+        <li><a class="link" href={profile.links.github}>GitHub</a></li>
+        <li><a class="link" href={profile.links.linkedin}>LinkedIn</a></li>
+      </ul>
+    </section>
+  </div>
+</Fresh>

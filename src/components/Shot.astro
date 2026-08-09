@@ -1,0 +1,52 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src: ImageMetadata;
+  srcDark?: ImageMetadata | undefined;
+  alt: string;
+  width: number;
+  eager?: boolean | undefined;
+  decorative?: boolean | undefined;
+}
+
+const { src, srcDark, alt, width, eager = false, decorative = false } = Astro.props;
+const label = decorative ? '' : alt;
+const loading = eager ? 'eager' : 'lazy';
+
+// A paired shot must stay lazy on both halves: an eager <img> is fetched even at
+// display:none, which downloads the capture the reader is never shown.
+const priority = eager ? 'high' : 'auto';
+
+// Asking for 2x and 3x of an image already at its source width produces two
+// more files of identical weight, and the browser then prefers one of them.
+const densities = (asset: ImageMetadata) => (width >= asset.width ? [1] : [1, 2, 3]);
+---
+
+{
+  srcDark ? (
+    <>
+      <Image
+        class="shot--light"
+        src={src}
+        alt={label}
+        width={width}
+        densities={densities(src)}
+        loading="lazy"
+        fetchpriority={priority}
+      />
+      <Image
+        class="shot--dark"
+        src={srcDark}
+        alt={label}
+        width={width}
+        densities={densities(srcDark)}
+        loading="lazy"
+        fetchpriority={priority}
+      />
+    </>
+  ) : (
+    <Image src={src} alt={label} width={width} densities={densities(src)} loading={loading} />
+  )
+}

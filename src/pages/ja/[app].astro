@@ -1,0 +1,248 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import Fresh from '../../layouts/Fresh.astro';
+import Shot from '../../components/Shot.astro';
+import { profile } from '../../data/cv.ts';
+import { isTranslated, softwareApplicationSchema, type TranslatedApp } from '../../lib/apps.ts';
+
+interface Props { app: TranslatedApp }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const apps = await getCollection('apps');
+  return apps
+    .filter(isTranslated)
+    .map((app) => ({ params: { app: app.id }, props: { app } }));
+};
+
+const { app } = Astro.props;
+const d = app.data;
+const ja = d.ja;
+
+const STATUS = {
+  'in-development': '開発中',
+  testing: '最終テスト中',
+  released: '公開中',
+} as const;
+
+const groups = d.facts.reduce<{ name: string; items: typeof d.facts }[]>((out, fact) => {
+  const name = ja.factGroups[fact.group ?? ''] ?? fact.group ?? '';
+  const last = out.at(-1);
+  if (last && last.name === name) last.items.push(fact);
+  else out.push({ name, items: [fact] });
+  return out;
+}, []);
+
+const isPhone = d.shots[0]?.device === 'iphone';
+const LEAD_W = isPhone ? 520 : 1100;
+const REST_W = isPhone ? 280 : 620;
+const lead = d.shots[d.hero] ?? d.shots[0];
+
+const paragraphs = ja.body.split(/\n\s*\n/).filter(Boolean);
+
+const schema = softwareApplicationSchema(d, {
+  name: ja.name,
+  description: ja.summary,
+  url: new URL(`/ja/${app.id}`, Astro.site).href,
+  image: new URL(`/og/${d.brand}.png`, Astro.site).href,
+  inLanguage: 'ja',
+});
+---
+
+<Fresh title={`${ja.name} — ${ja.tagline}`} description={ja.summary} brand={d.brand} lang="ja" alternate={`/${app.id}`}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+  <div class="page">
+    <section class="opener">
+      <div class="opener__field"></div>
+      {d.kanji && (
+        <div class="opener__spine vertical vertical--huge mincho" aria-hidden="true">{d.kanji}</div>
+      )}
+
+      <div class="opener__type">
+        <p class="micro micro--accent">{STATUS[d.status]}</p>
+        <h1 class="mag-1 mt-md">{ja.name}</h1>
+        <p class="mag-3 mt-lg">{ja.tagline}</p>
+        <p class="read mt-xl">{ja.summary}</p>
+        <p class="micro mt-xl">{d.platforms.join(' · ')}</p>
+
+        {d.status !== 'released' && (
+          <p class="micro mt-lg">
+            <a
+              class="link"
+              href={`mailto:${profile.email}?subject=${encodeURIComponent(`${ja.name} — 公開時に知らせてほしい`)}`}
+            >
+              公開したら知らせてほしい
+            </a>
+          </p>
+        )}
+      </div>
+
+      {lead && (
+        <figure
+          class:list={[
+            'opener__art',
+            'plate',
+            isPhone ? 'plate--phone' : 'plate--pad',
+            lead.framed ? 'plate--framed' : 'plate--bare',
+          ]}
+        >
+          <input class="plate__toggle" type="checkbox" id="shot-lead" />
+          <label class="plate__open" for="shot-lead">
+            <Shot src={lead.src} srcDark={lead.srcDark} alt={lead.alt} width={LEAD_W} eager />
+          </label>
+          <label class="plate__zoom" for="shot-lead" aria-label="閉じる">
+            <Shot src={lead.src} srcDark={lead.srcDark} alt={lead.alt} width={lead.src.width} decorative />
+          </label>
+        </figure>
+      )}
+    </section>
+  </div>
+
+  <div class="page">
+    <section class="spread">
+      <p class="micro">できること</p>
+      <div class="entries mt-2xl">
+        {ja.features.map((feature, index) => (
+          <article class="entry">
+            <div class="entry__n">{String(index + 1).padStart(2, '0')}</div>
+            <h2 class="entry__t mag-3">{feature.title}</h2>
+            <p class="entry__b note">{feature.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  {ja.statement && (
+    <section class="statement">
+      <div class="page">
+        <p class="micro">なぜつくったか</p>
+        <p class="statement__t mt-lg">{ja.statement}</p>
+      </div>
+    </section>
+  )}
+
+  {d.shots.length > 0 && (
+    <div class="page">
+      <section class="spread">
+        <p class="micro">{isPhone ? 'iPhone で' : 'iPad で'}</p>
+        <div class:list={['plates', 'mt-2xl', !isPhone && 'plates--pad']}>
+          {d.shots.map((shot, index) => (
+            <figure
+              class:list={[
+                'plate',
+                index === 0 ? 'plate--lead' : 'plate--rest',
+                isPhone ? 'plate--phone' : 'plate--pad',
+                shot.framed ? 'plate--framed' : 'plate--bare',
+              ]}
+            >
+              <input class="plate__toggle" type="checkbox" id={`shot-${index + 1}`} />
+              <label class="plate__open" for={`shot-${index + 1}`}>
+                <Shot
+                  src={shot.src}
+                  srcDark={shot.srcDark}
+                  alt={shot.alt}
+                  width={index === 0 ? LEAD_W : REST_W}
+                />
+              </label>
+              <label class="plate__zoom" for={`shot-${index + 1}`} aria-label="閉じる">
+                <Shot src={shot.src} srcDark={shot.srcDark} alt={shot.alt} width={shot.src.width} decorative />
+              </label>
+              <figcaption>
+                <b>{String(index + 1).padStart(2, '0')}</b>
+                <span>{ja.captions[index] ?? shot.caption}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+    </div>
+  )}
+
+  {d.sample && (
+    <div class="page">
+      <section class="spread grid">
+        <div class="col-a">
+          <p class="micro">一問まるごと</p>
+          <blockquote class="source__claim mt-lg">{ja.sample?.claim ?? d.sample.claim}</blockquote>
+          <p class="micro micro--accent mt-lg">
+            <span class="source__mark" aria-hidden="true">{d.sample.correct ? '○' : '×'}</span>
+            {d.sample.correct ? ' 正しい' : ' 誤り'}
+          </p>
+        </div>
+        <div class="col-b">
+          <p class="note">{ja.sample?.note ?? d.sample.note}</p>
+          <p class="note mt-lg"><em>「{d.sample.ruleJa ?? d.sample.ruleEn}」</em></p>
+          {!d.sample.ruleJa && <p class="micro mt-sm">（英訳。原文は出典を参照）</p>}
+          <p class="micro mt-md">
+            <cite class="source__ref">{d.sample.reference}</cite>
+            <cite class="source__ref">{d.sample.edition}</cite>
+          </p>
+        </div>
+      </section>
+    </div>
+  )}
+
+  {ja.capabilities.length > 0 && (
+    <div class="page">
+      <section class="spread">
+        <p class="micro">中身</p>
+        <div class="figures mt-2xl">
+          {ja.capabilities.map((section) => (
+            <div class="figures__group">
+              <div class="figures__name">{section.group}</div>
+              <div class="figures__items">
+                <ul class="caps">{section.items.map((item) => <li>{item}</li>)}</ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  )}
+
+  {groups.length > 0 && (
+    <div class="page">
+      <section class="spread">
+        <p class="micro">数字で見る</p>
+        <div class="figures mt-2xl">
+          {groups.map((group) => (
+            <div class="figures__group">
+              <div class="figures__name">{group.name}</div>
+              <div class="figures__items">
+                {group.items.map((fact) => (
+                  <div class="figure">
+                    <b>{fact.value}</b>
+                    <span>{ja.factLabels[fact.label] ?? fact.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  )}
+
+  <div class="page">
+    <section class="spread grid">
+      <div class="col-c">
+        <p class="micro">つくりかた</p>
+        <div class="read mt-lg">{paragraphs.map((text) => <p>{text}</p>)}</div>
+        <ul class="tags mt-xl">{d.tech.map((item) => <li>{item}</li>)}</ul>
+      </div>
+      <div class="col-d">
+        {ja.notes.map((note) => (
+          <div class="mt-xl">
+            <p class="micro">{note.term}</p>
+            <p class="note mt-sm">{note.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {(ja.disclaimer ?? d.disclaimer) && (
+      <section class="spread--tight"><p class="note">{ja.disclaimer ?? d.disclaimer}</p></section>
+    )}
+  </div>
+</Fresh>

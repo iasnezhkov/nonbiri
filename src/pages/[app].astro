@@ -1,0 +1,244 @@
+---
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import Shot from '../components/Shot.astro';
+import { getCollection, render } from 'astro:content';
+import Fresh from '../layouts/Fresh.astro';
+import { profile } from '../data/cv.ts';
+import { softwareApplicationSchema } from '../lib/apps.ts';
+
+interface Props { app: CollectionEntry<'apps'> }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const apps = await getCollection('apps');
+  return apps.map((app) => ({ params: { app: app.id }, props: { app } }));
+};
+
+const { app } = Astro.props;
+const d = app.data;
+const { Content } = await render(app);
+
+const STATUS = {
+  'in-development': 'In development',
+  testing: 'Final testing',
+  released: 'Available',
+} as const;
+
+const groups = d.facts.reduce<{ name: string; items: typeof d.facts }[]>((out, fact) => {
+  const name = fact.group ?? '';
+  const last = out.at(-1);
+  if (last && last.name === name) last.items.push(fact);
+  else out.push({ name, items: [fact] });
+  return out;
+}, []);
+
+const isPhone = d.shots[0]?.device === 'iphone';
+const LEAD_W = isPhone ? 520 : 1100;
+const REST_W = isPhone ? 280 : 620;
+const lead = d.shots[d.hero] ?? d.shots[0];
+
+const schema = softwareApplicationSchema(d, {
+  name: d.name,
+  description: d.summary,
+  url: new URL(`/${app.id}`, Astro.site).href,
+  image: new URL(`/og/${d.brand}.png`, Astro.site).href,
+  inLanguage: 'en',
+});
+---
+
+<Fresh
+  title={`${d.name} — ${d.tagline}`}
+  description={d.summary}
+  brand={d.brand}
+  alternate={d.ja ? `/ja/${app.id}` : undefined}
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+  <div class="page">
+    <section class="opener">
+      <div class="opener__field"></div>
+      {d.kanji && <div class="opener__spine vertical vertical--huge mincho" aria-hidden="true">{d.kanji}</div>}
+
+      <div class="opener__type">
+        <p class="micro micro--accent">{STATUS[d.status]}</p>
+        <h1 class="mag-1 mt-md">{d.name}</h1>
+        <p class="mag-3 mt-lg">{d.tagline}</p>
+        <p class="read mt-xl">{d.summary}</p>
+        <p class="micro mt-xl">{d.platforms.join(' · ')}</p>
+
+        {d.status !== 'released' && (
+          <p class="micro mt-lg">
+            <a
+              class="link"
+              href={`mailto:${profile.email}?subject=${encodeURIComponent(`${d.name} — tell me when it ships`)}`}
+            >
+              Tell me when it ships
+            </a>
+          </p>
+        )}
+      </div>
+
+      {lead && (
+        <figure
+          class:list={[
+            'opener__art',
+            'plate',
+            isPhone ? 'plate--phone' : 'plate--pad',
+            lead.framed ? 'plate--framed' : 'plate--bare',
+          ]}
+        >
+          <input class="plate__toggle" type="checkbox" id="shot-lead" />
+          <label class="plate__open" for="shot-lead">
+            <Shot src={lead.src} srcDark={lead.srcDark} alt={lead.alt} width={LEAD_W} eager />
+          </label>
+          <label class="plate__zoom" for="shot-lead" aria-label="Close">
+            <Shot src={lead.src} srcDark={lead.srcDark} alt={lead.alt} width={lead.src.width} decorative />
+          </label>
+        </figure>
+      )}
+    </section>
+  </div>
+
+  <div class="page">
+    <section class="spread">
+      <p class="micro">What it does</p>
+      <div class="entries mt-2xl">
+        {d.features.map((feature, index) => (
+          <article class="entry">
+            <div class="entry__n">{String(index + 1).padStart(2, '0')}</div>
+            <h2 class="entry__t mag-3">{feature.title}</h2>
+            <p class="entry__b note">{feature.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  {d.statement && (
+    <section class="statement">
+      <div class="page">
+        <p class="micro">Why it exists</p>
+        <p class="statement__t mt-lg">{d.statement}</p>
+      </div>
+    </section>
+  )}
+
+  {d.shots.length > 0 && (
+    <div class="page">
+      <section class="spread">
+        <p class="micro">{isPhone ? 'On iPhone' : 'On iPad'}</p>
+        <div class:list={['plates', 'mt-2xl', !isPhone && 'plates--pad']}>
+          {d.shots.map((shot, index) => (
+            <figure
+              class:list={[
+                'plate',
+                index === 0 ? 'plate--lead' : 'plate--rest',
+                isPhone ? 'plate--phone' : 'plate--pad',
+                shot.framed ? 'plate--framed' : 'plate--bare',
+              ]}
+            >
+              <input class="plate__toggle" type="checkbox" id={`shot-${index + 1}`} />
+              <label class="plate__open" for={`shot-${index + 1}`}>
+                <Shot
+                  src={shot.src}
+                  srcDark={shot.srcDark}
+                  alt={shot.alt}
+                  width={index === 0 ? LEAD_W : REST_W}
+                />
+              </label>
+              <label class="plate__zoom" for={`shot-${index + 1}`} aria-label="Close">
+                <Shot src={shot.src} srcDark={shot.srcDark} alt={shot.alt} width={shot.src.width} decorative />
+              </label>
+              <figcaption>
+                <b>{String(index + 1).padStart(2, '0')}</b>
+                <span>{shot.caption}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+    </div>
+  )}
+
+  {d.sample && (
+    <div class="page">
+      <section class="spread grid">
+        <div class="col-a">
+          <p class="micro">One question, in full</p>
+          <blockquote class="source__claim mt-lg">{d.sample.claim}</blockquote>
+          <p class="micro micro--accent mt-lg">
+            <span class="source__mark" aria-hidden="true">{d.sample.correct ? '○' : '×'}</span>
+            {d.sample.correct ? ' True' : ' False'}
+          </p>
+        </div>
+        <div class="col-b">
+          <p class="note">{d.sample.note}</p>
+          <p class="note mt-lg"><em>“{d.sample.ruleEn}”</em></p>
+          <p class="micro mt-md">
+            <cite class="source__ref">{d.sample.reference}</cite>
+            <cite class="source__ref">{d.sample.edition}</cite>
+          </p>
+        </div>
+      </section>
+    </div>
+  )}
+
+  {d.capabilities.length > 0 && (
+    <div class="page">
+      <section class="spread">
+        <p class="micro">What is in it</p>
+        <div class="figures mt-2xl">
+          {d.capabilities.map((section) => (
+            <div class="figures__group">
+              <div class="figures__name">{section.group}</div>
+              <div class="figures__items">
+                <ul class="caps">{section.items.map((item) => <li>{item}</li>)}</ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  )}
+
+  {groups.length > 0 && (
+    <div class="page">
+      <section class="spread">
+        <p class="micro">By the numbers</p>
+        <div class="figures mt-2xl">
+          {groups.map((group) => (
+            <div class="figures__group">
+              <div class="figures__name">{group.name}</div>
+              <div class="figures__items">
+                {group.items.map((fact) => (
+                  <div class="figure"><b>{fact.value}</b><span>{fact.label}</span></div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  )}
+
+  <div class="page">
+    <section class="spread grid">
+      <div class="col-c">
+        <p class="micro">How it’s built</p>
+        <div class="read mt-lg"><Content /></div>
+        <ul class="tags mt-xl">{d.tech.map((item) => <li>{item}</li>)}</ul>
+      </div>
+      <div class="col-d">
+        {d.notes.map((note) => (
+          <div class="mt-xl">
+            <p class="micro">{note.term}</p>
+            <p class="note mt-sm">{note.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {d.disclaimer && (
+      <section class="spread--tight"><p class="note">{d.disclaimer}</p></section>
+    )}
+  </div>
+</Fresh>

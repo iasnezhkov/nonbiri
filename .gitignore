@@ -1,0 +1,43 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env*
+!.env.example
+
+# archives and exports, which are never source
+*.zip
+*.tar
+*.tar.gz
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+
+# layout audit output
+.shots/
+
+# Working notes. TODO.md holds unreleased-app defect lists, store-submission
+# blockers and unfinished legal copy; notes/ is the place to put anything else
+# of that kind, so a new file does not have to be remembered here.
+TODO.md
+notes/
+*.local.md
+
+# Layout references and the notes about them. Private study only: the scans are
+# in copyright, and this repository is public.
+refs/

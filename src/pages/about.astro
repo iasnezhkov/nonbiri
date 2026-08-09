@@ -1,0 +1,166 @@
+---
+import Fresh from '../layouts/Fresh.astro';
+import { profile, experience, earlier, skills, projects, education, languages } from '../data/cv.ts';
+
+const featured = experience.filter((role) => role.featured);
+const rest = experience.filter((role) => !role.featured);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  mainEntity: {
+    '@type': 'Person',
+    name: profile.name,
+    jobTitle: profile.headline,
+    description: profile.summary,
+    url: 'https://nonbiri.dev/about',
+    email: `mailto:${profile.email}`,
+    sameAs: [profile.links.github, profile.links.linkedin],
+    knowsAbout: skills.map((skill) => skill.label),
+    alumniOf: { '@type': 'CollegeOrUniversity', name: education.institution },
+  },
+};
+---
+
+<Fresh
+  title="Ilia Snezhkov — backend and platform engineer"
+  description="Ilia Snezhkov — backend and platform engineer working in application security."
+  alternate="/ja/about"
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+  <div class="page">
+    <section class="opener">
+      <div class="opener__field"></div>
+      <div class="opener__spine vertical vertical--huge mincho" lang="ja" aria-hidden="true">脆弱性</div>
+
+      <div class="opener__type">
+        <p class="micro micro--accent">About</p>
+        <h1 class="mag-1 mt-md">Ilia<br />Snezhkov</h1>
+        <p class="mag-3 mt-lg">Backend and platform engineer, working in application security.</p>
+        <p class="read mt-xl">
+          Seven years of Python — startups, a high-traffic consumer product, a bank, and
+          now a telecom group.
+        </p>
+        <ul class="tags mt-xl">
+          <li><a class="link" href="/cv">Curriculum vitae</a></li>
+          <li><a class="link" href="/cv.pdf">PDF</a></li>
+          <li><a class="link" href={profile.links.github}>GitHub</a></li>
+          <li><a class="link" href={profile.links.linkedin}>LinkedIn</a></li>
+          <li><a class="link" href={`mailto:${profile.email}`}>Email</a></li>
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <section class="statement statement--soft">
+    <div class="page">
+      <p class="micro">What I do</p>
+      <p class="statement__t mt-lg">
+        I build internal platforms that put security scanning and triage inside the
+        pipelines teams already use.
+      </p>
+      <p class="note mt-xl">
+        Built an application-security platform from scratch at two companies. In practice
+        the work is getting scanners to run where the code already lives, and reducing
+        what they return to the findings worth acting on.
+      </p>
+    </div>
+  </section>
+
+  <div class="page">
+    <section class="spread">
+      <p class="micro">Experience</p>
+      <div class="entries mt-2xl">
+        {
+          featured.map((role, index) => (
+            <article class="entry">
+              <div class="entry__n">{String(index + 1).padStart(2, '0')}</div>
+              <div class="entry__t">
+                <h2 class="mag-3">{role.company}</h2>
+                <p class="micro mt-sm">{role.scope ?? role.title}</p>
+              </div>
+              <p class="entry__b note">{role.summary}</p>
+            </article>
+          ))
+        }
+        <article class="entry">
+          <div class="entry__n">{String(featured.length + 1).padStart(2, '0')}</div>
+          <div class="entry__t">
+            <h2 class="mag-3">{earlier.title}</h2>
+            <p class="micro mt-sm">{rest.map((role) => role.company).join(' · ')}</p>
+          </div>
+          <p class="entry__b note">{earlier.summary}</p>
+        </article>
+      </div>
+      <p class="mt-2xl"><a class="link link--lone" href="/cv">Every role, with dates and detail — CV</a></p>
+    </section>
+  </div>
+
+  <div class="page">
+    <section class="spread">
+      <p class="micro">Technical skills</p>
+      <div class="figures mt-2xl">
+        {
+          skills.map((skill) => (
+            <div class="figures__group">
+              <div class="figures__name figures__name--latin">{skill.label}</div>
+              <div class="figures__items">
+                <p class="read">{skill.value}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="spread">
+      <p class="micro">Apps</p>
+      <p class="read mt-lg">
+        Suji and Gokaku, the two apps I build under <a class="link" href="/">Nonbiri</a>.
+        Both are mine end to end, from the content pipelines to the interface.
+      </p>
+      <div class="entries mt-2xl">
+        {
+          projects.map((project, index) => (
+            <article class="entry">
+              <div class="entry__n">{String(index + 1).padStart(2, '0')}</div>
+              <div class="entry__t">
+                <h2 class="mag-3"><a class="link" href={project.href}>{project.name}</a></h2>
+                <p class="micro mt-sm">{project.tech.join(' · ')}</p>
+              </div>
+              <p class="entry__b note">{project.summary}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="spread grid">
+      <div class="col-c">
+        <p class="micro">Education</p>
+        <p class="read mt-lg">
+          {education.institution}, {education.location} — {education.degree},
+          {' '}{education.field}, {education.from.slice(-4)}–{education.to.slice(-4)}.
+        </p>
+        <p class="note mt-md">{education.notes}</p>
+      </div>
+      <div class="col-d">
+        <p class="micro">Languages</p>
+        <p class="read mt-lg">
+          {languages.map((language) => `${language.name} — ${language.level}`).join(' · ')}
+        </p>
+      </div>
+    </section>
+
+    <section class="spread">
+      <p class="micro">Get in touch</p>
+      <p class="mag-3 mt-lg"><a class="link" href={`mailto:${profile.email}`}>{profile.email}</a></p>
+      <ul class="tags mt-xl">
+        <li><a class="link" href="/cv">Curriculum vitae</a></li>
+        <li><a class="link" href="/cv.pdf">Download CV as PDF</a></li>
+        <li><a class="link" href={profile.links.github}>GitHub</a></li>
+        <li><a class="link" href={profile.links.linkedin}>LinkedIn</a></li>
+      </ul>
+    </section>
+  </div>
+</Fresh>

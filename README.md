@@ -4,7 +4,7 @@
 
 The site of a one-person studio, at [nonbiri.dev](https://nonbiri.dev).
 
-Eleven routes, each in English at the root and in Japanese under `/ja`. Astro
+Twelve routes, each in English at the root and in Japanese under `/ja`. Astro
 and TypeScript at its strictest, zero bundled JavaScript, hand-written CSS
 driven by generated design tokens, and no webfonts.
 
@@ -121,7 +121,7 @@ the build rather than reaching the App Store review queue.
 | Command | Action |
 | --- | --- |
 | `npm run check` | tokens current · every class defined · no working notes · artefacts current · `astro check` |
-| `npm run shoot` | geometry sweep — overlaps and overflow, 22 routes × 7 widths |
+| `npm run shoot` | geometry sweep — overlaps and overflow, 24 routes × 7 widths |
 | `npm run shoot -- --shots --coverage` | the above, plus screenshots and ink coverage |
 | `npm run theme` | paired screenshots: right capture shown, only it fetched |
 | `npm run tokens` | regenerate `tokens.css` and `tokens.d.ts` |

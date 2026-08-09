@@ -38,8 +38,6 @@ const inRepo = git(['rev-parse', '--is-inside-work-tree']) !== null;
  * what makes this useful while working.
  */
 function committedAt(path: string): number | null {
-  if (!inRepo) return null;
-  if ((git(['status', '--porcelain', '--', path]) ?? '').trim() !== '') return null;
   const seconds = (git(['log', '-1', '--format=%ct', '--', path]) ?? '').trim();
   return seconds ? Number(seconds) * 1000 : null;
 }
@@ -54,13 +52,24 @@ async function fsTime(path: string, pick: 'newest' | 'oldest'): Promise<number> 
   return pick === 'newest' ? Math.max(...times) : Math.min(...times);
 }
 
-async function timeOf(path: string, pick: 'newest' | 'oldest'): Promise<number> {
-  return committedAt(path) ?? (await fsTime(path, pick));
+function isDirty(path: string): boolean {
+  return inRepo && (git(['status', '--porcelain', '--', path]) ?? '').trim() !== '';
 }
 
 let stale = 0;
 
 for (const artefact of ARTEFACTS) {
+  /**
+   * One clock for the whole comparison. Commit times answer it on a checkout,
+   * where the filesystem cannot; mtimes answer it while working. Mixing them
+   * reads a regenerated-but-byte-identical artefact — which git sees as
+   * unchanged — as older than the source that was just edited.
+   */
+  const paths = [artefact.out, ...artefact.sources];
+  const byHistory = inRepo && !paths.some(isDirty);
+  const timeOf = async (path: string, pick: 'newest' | 'oldest') =>
+    (byHistory ? committedAt(path) : null) ?? (await fsTime(path, pick));
+
   const built = await timeOf(artefact.out, 'oldest').catch(() => 0);
   if (!built) {
     console.error(`✗ ${artefact.out} is missing — run \`${artefact.command}\``);

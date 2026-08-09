@@ -1,6 +1,9 @@
 import { chromium, type Browser } from 'playwright';
+import { serveDist } from './serve.ts';
 
-const BASE = process.env.BASE ?? 'http://localhost:4321';
+const server = await serveDist(4332);
+
+const BASE = process.env.BASE ?? 'http://127.0.0.1:4332';
 const ROUTE = process.env.ROUTE ?? '/gokaku';
 
 const SHOTS = `[...document.querySelectorAll('img')]
@@ -142,5 +145,6 @@ await scenario('evening, forced light', 'dark', 'light', EVENING);
 }
 
 await browser.close();
+server.close();
 console.log(`\n${failures ? `✗ ${failures} failed` : '✓ all checks passed'}`);
 process.exit(failures ? 1 : 0);

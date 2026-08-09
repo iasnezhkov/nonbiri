@@ -234,7 +234,7 @@ ja:
     想定している間違いの種類を持ち、規則が改まるたびに固定した教則の本文に対して
     全問が再検証されます。
 
-    学習は10問単位で進みます。新しい問題、次に間違えた問題、そして苦手な分野の順。
+    学習は既定で10問単位、5問・25問・50問にも変えられます。新しい問題、次に間違えた問題、そして苦手な分野の順。
     習得の判定は、初回で正解するか、間違えたあと2回続けて正解すること。
     間隔反復はあえて入れていません。ここでの課題は「何年もかけて覚える」ことでは
     なく、「決まった日に合格する」ことだからです。
@@ -275,7 +275,8 @@ the rule it comes from, the chapter reference, and the category of mistake it is
 meant to catch — and the whole bank is re-verified against the pinned 教則 corpus
 whenever the rules move.
 
-Study runs in batches of ten: new material first, then what you got wrong, then
+Study runs in batches — ten by default, or five, twenty-five or fifty: new
+material first, then what you got wrong, then
 your weakest topics. Mastery means answered right first time, or twice in a row
 after a miss. There is no spaced repetition, deliberately — the case here isn’t
 "learn this for years", it’s "pass on a date".

@@ -1,7 +1,10 @@
 import { mkdir } from 'node:fs/promises';
 import { chromium } from 'playwright';
+import { serveDist } from './serve.ts';
 
-const BASE = process.env.BASE ?? 'http://localhost:4321';
+const server = await serveDist(4331);
+
+const BASE = process.env.BASE ?? 'http://127.0.0.1:4331';
 const OUT = '.shots';
 
 const ROUTES = [
@@ -14,6 +17,7 @@ const ROUTES = [
   '/gokaku/terms',
   '/gokaku/support',
   '/suji/privacy',
+  '/suji/terms',
   '/suji/support',
   '/404',
   '/ja',
@@ -25,6 +29,7 @@ const ROUTES = [
   '/ja/gokaku/terms',
   '/ja/gokaku/support',
   '/ja/suji/privacy',
+  '/ja/suji/terms',
   '/ja/suji/support',
   '/ja/404',
 ];
@@ -164,4 +169,5 @@ for (const width of WIDTHS) {
 }
 
 await browser.close();
+server.close();
 process.exit(failures ? 1 : 0);

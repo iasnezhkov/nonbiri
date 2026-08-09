@@ -30,10 +30,14 @@ receive it and the app never uploads it anywhere.
 
 ## Network access
 
-The app itself makes no network requests. The only outbound traffic comes from
-the operating system on your behalf: the App Store or Google Play when you make a
-tip purchase, and the system "rate this app" prompt. Both are handled by Apple and
-Google under their own privacy policies; no data from them reaches us.
+The app itself makes no network requests. The only outbound traffic happens on
+your behalf: the App Store or Google Play when you make a tip purchase, and the
+system "rate this app" prompt — both handled by Apple and Google under their own
+privacy policies, with no data from them reaching us.
+
+The links in Settings open pages on nonbiri.dev in your browser. That site
+carries no analytics and sets no cookies, and the app itself sends nothing when
+you follow one.
 
 ## Payments
 

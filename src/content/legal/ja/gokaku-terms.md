@@ -39,7 +39,7 @@ version: '1.0'
 
 **標識の画像。** 日本の道路標識は政府の告示によって定められており、著作権法第13条により著作権の対象となりません。出典：ウィキメディア・コモンズ（PD-Japan-exempt）および国土交通省の公式データ（政府標準利用規約 v2.0）。商用利用は認められており出典表示の義務もありませんが、透明性のためにここに記載します。
 
-**オープンソース。** 合格は Flutter で構築し、flutter_svg、in_app_purchase、shared_preferences、share_plus、file_selector、path_provider、in_app_review、flutter_displaymode、intl を使用しています。ライセンス全文はアプリ内のライセンス画面でご確認いただけます。
+**オープンソース。** 合格は Flutter で構築し、flutter_svg、in_app_purchase、shared_preferences、share_plus、file_selector、path_provider、in_app_review、flutter_displaymode、url_launcher、intl を使用しています。ライセンス全文はアプリ内のライセンス画面でご確認いただけます。
 
 ## 連絡先
 

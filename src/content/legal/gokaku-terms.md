@@ -62,7 +62,7 @@ required — it is given here for transparency.
 
 **Open source.** Gokaku is built with Flutter and uses flutter_svg,
 in_app_purchase, shared_preferences, share_plus, file_selector, path_provider,
-in_app_review, flutter_displaymode and intl. Full licences are available from the
+in_app_review, flutter_displaymode, url_launcher and intl. Full licences are available from the
 app's system licence screen.
 
 ## Contact

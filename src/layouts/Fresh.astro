@@ -74,12 +74,6 @@ const docsFor = (app: (typeof ordered)[number]) =>
 const appHref = (app: (typeof ordered)[number]) =>
   lang === 'ja' && app.data.ja ? `/ja/${app.id}` : `/${app.id}`;
 
-const THEMES = [
-  { value: 'light', label: T.light, glyph: '☀' },
-  { value: 'auto', label: T.auto, glyph: '◐' },
-  { value: 'dark', label: T.dark, glyph: '☾' },
-] as const;
-
 const other = lang === 'ja' ? 'en' : 'ja';
 const alt = alternate ? { href: alternate, lang: other } : null;
 
@@ -150,14 +144,18 @@ const LANGS = [
       <header class="masthead">
         <a class="masthead__mark" href={root || '/'}>Nonbiri</a>
         <div class="masthead__end">
-          <div class="theme" data-theme-switch role="group" aria-label={T.theme}>
-            {THEMES.map((option) => (
-              <button type="button" data-theme-value={option.value} aria-pressed="false">
-                <span aria-hidden="true">{option.glyph}</span>
-                <span class="visually-hidden">{option.label}</span>
-              </button>
-            ))}
-          </div>
+          <button
+            class="theme"
+            type="button"
+            data-theme-switch
+            data-label={T.theme}
+            data-light={T.light}
+            data-dark={T.dark}
+            data-auto={T.auto}
+            aria-label={`${T.theme}: ${T.auto}`}
+          >
+            <span data-theme-glyph aria-hidden="true">◐</span>
+          </button>
 
           <div class="lang" data-lang-switch role="group" aria-label={T.language}>
             {LANGS.map((option) =>

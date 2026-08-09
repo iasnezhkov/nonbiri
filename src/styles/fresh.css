@@ -847,12 +847,31 @@ h3 {
   gap: var(--s-sm) clamp(var(--s-md), 2.5vw, var(--s-2xl));
 }
 
-.theme {
-  display: flex;
-  gap: 2px;
+/* A phone cannot hold the wordmark, both controls and four nav items on one
+   line, so the split is chosen rather than left to flex-wrap: mark and controls
+   share the first line, navigation takes the second. `display: contents` lifts
+   the group's children into the same grid; the div carries no semantics. */
+@media (max-width: 700px) {
+  .masthead {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: baseline;
+    row-gap: var(--s-md);
+  }
+
+  .masthead__end {
+    display: contents;
+  }
+
+  .masthead__nav {
+    grid-column: 1 / -1;
+  }
 }
 
-.theme button {
+/* One button that cycles, not three that sit side by side: three of them plus
+   the language pair pushed the masthead into a third row on a phone, with the
+   settings landing above the navigation. */
+.theme {
   width: 26px;
   height: 26px;
   display: grid;
@@ -868,11 +887,7 @@ h3 {
   transition: color 150ms ease, background 150ms ease;
 }
 
-.theme button:hover {
-  color: var(--ink);
-}
-
-.theme button[aria-pressed='true'] {
+.theme:hover {
   color: var(--ink);
   background: color-mix(in srgb, var(--ink) 8%, transparent);
 }

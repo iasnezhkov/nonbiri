@@ -3,6 +3,8 @@
   var DAY_START = 7;
   var DAY_END = 19;
   var PAST_THE_HOUR_MS = 1000;
+  var GLYPH = { auto: '◐', light: '☀', dark: '☾' };
+  var NEXT = { auto: 'light', light: 'dark', dark: 'auto' };
 
   var root = document.documentElement;
 
@@ -47,32 +49,30 @@
   });
 
   document.addEventListener('DOMContentLoaded', function () {
-    var group = document.querySelector('[data-theme-switch]');
-    if (!group) return;
+    var button = document.querySelector('[data-theme-switch]');
+    if (!button) return;
 
-    var buttons = group.querySelectorAll('button[data-theme-value]');
+    var glyph = button.querySelector('[data-theme-glyph]');
 
-    function syncPressedState() {
-      buttons.forEach(function (button) {
-        button.setAttribute('aria-pressed', String(button.dataset.themeValue === (choice || 'auto')));
-      });
+    function sync() {
+      var mode = choice || 'auto';
+      if (glyph) glyph.textContent = GLYPH[mode];
+      button.setAttribute('aria-label', button.dataset.label + ': ' + button.dataset[mode]);
     }
 
-    buttons.forEach(function (button) {
-      button.addEventListener('click', function () {
-        var value = button.dataset.themeValue;
-        choice = value === 'light' || value === 'dark' ? value : null;
-        try {
-          if (choice) localStorage.setItem(KEY, choice);
-          else localStorage.removeItem(KEY);
-        } catch {
-          // Storage refused: the choice still applies for this page view.
-        }
-        apply();
-        syncPressedState();
-      });
+    button.addEventListener('click', function () {
+      var mode = NEXT[choice || 'auto'];
+      choice = mode === 'auto' ? null : mode;
+      try {
+        if (choice) localStorage.setItem(KEY, choice);
+        else localStorage.removeItem(KEY);
+      } catch {
+        // Storage refused: the choice still applies for this page view.
+      }
+      apply();
+      sync();
     });
 
-    syncPressedState();
+    sync();
   });
 })();

@@ -101,12 +101,26 @@ await scenario('evening, forced light', 'dark', 'light', EVENING);
   const page = await context.newPage();
   await page.goto(BASE + ROUTE, { waitUntil: 'networkidle' });
   const before = (await page.evaluate(SHOTS)) as Shot[];
-  await page.click('[data-theme-switch] button[data-theme-value="dark"]');
+  // One button that cycles auto → light → dark, so click until it lands.
+  for (let i = 0; i < 3 && (await page.getAttribute('html', 'data-theme')) !== 'dark'; i++) {
+    await page.click('[data-theme-switch]');
+  }
+
+  // Clicking scrolls the switch into view, and the switch sits in the colophon.
+  // Come back to a plate before measuring, or nothing is in view to measure.
+  await page.evaluate(() => document.querySelector('.plate')?.scrollIntoView({ block: 'center' }));
+
+  // Wait for the copies actually on screen, not for any dark copy anywhere: a
+  // shot loaded further down the page satisfies `some` immediately and the
+  // measurement then runs before the visible one has been fetched.
   await page.waitForFunction(
-    () =>
-      [...document.querySelectorAll('img.shot--dark')].some(
-        (img) => getComputedStyle(img).display !== 'none' && (img as HTMLImageElement).complete,
-      ),
+    () => {
+      const onScreen = [...document.querySelectorAll('.plate__open img.shot--dark')].filter((img) => {
+        const box = img.getBoundingClientRect();
+        return getComputedStyle(img).display !== 'none' && box.bottom > 0 && box.top < window.innerHeight;
+      }) as HTMLImageElement[];
+      return onScreen.length > 0 && onScreen.every((img) => img.complete && img.naturalWidth > 0);
+    },
     undefined,
     { timeout: 5000 },
   ).catch(() => {});

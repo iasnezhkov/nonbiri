@@ -55,20 +55,24 @@ features:
 statement: >-
   Generating question variants is easy. Keeping each one faithful to what the
   rulebook actually says is the slow part.
-# Transcribed from the shipped build (the same item as shots/03-citation).
-# ruleJa is deliberately absent: the app keeps the Japanese original behind a
-# disclosure, so it is not visible in that capture. Paste it verbatim from the
-# bank — reconstructing it would break the one claim this block exists to make.
+# Item GS-045, the same one shown in shots/06-answered. Transcribed from the
+# shipped build, with ruleJa taken verbatim from the question bank — the app
+# keeps the Japanese original behind a disclosure, so only its opening line is
+# visible in the capture. Never reconstruct it: quoting the 教則 exactly is the
+# one claim this block exists to make.
 sample:
   claim: >-
-    This sign designates the minimum speed for motor vehicles — you must not
-    drive slower than the number shown.
+    This sign designates the maximum speed for motor vehicles and streetcars,
+    and a 30 km/h maximum for standard mopeds.
   correct: true
   note: >-
-    Sign 324 sets the minimum speed for motor vehicles. It is distinguished from
-    the maximum speed sign (323) by an underline beneath the number.
-  ruleEn: Designation of the minimum speed for motor vehicles.
-  reference: 教則 付表3（1）26（規制標識）
+    Sign 323 sets the maximum speed. It applies to motor vehicles and
+    streetcars; additionally, a 30 km/h maximum applies to mopeds.
+  ruleEn: >-
+    (1) Designation of the maximum speed for motor vehicles and streetcars.
+    (2) Designation of a maximum speed of 30 km/h or less for mopeds.
+  ruleJa: （１）自動車と路面電車…の最高速度の指定（２）原動機付自転車の時速30キロメートル以下の最高速度の指定
+  reference: 教則 付表3（1）25（規制標識）
   edition: 49th revision · 13 November 2024
 facts:
   - group: 問題 · questions
@@ -108,27 +112,27 @@ shots:
     caption: Where a session starts
     device: iphone
     framed: true
-  - src: ./shots/gokaku/02-question.webp
-    srcDark: ./shots/gokaku/02-question-dark.webp
-    alt: A true/false question showing a road sign, with ○ and × buttons
+  - src: ./shots/gokaku/05-sign-question.webp
+    srcDark: ./shots/gokaku/05-sign-question-dark.webp
+    alt: A true/false question showing a speed limit sign, with TRUE and FALSE buttons
     caption: Real exam format — true or false
     device: iphone
     framed: true
-  - src: ./shots/gokaku/03-citation.webp
-    srcDark: ./shots/gokaku/03-citation-dark.webp
-    alt: The same question after answering, showing the verdict and the official rule
+  - src: ./shots/gokaku/06-answered.webp
+    srcDark: ./shots/gokaku/06-answered-dark.webp
+    alt: The same question after answering, showing the verdict, the explanation and the official rule with its chapter reference
     caption: The rule the answer comes from
     device: iphone
     framed: true
-  - src: ./shots/gokaku/04-exam.webp
-    srcDark: ./shots/gokaku/04-exam-dark.webp
-    alt: A mock exam in progress with a countdown timer and question palette
-    caption: Full mock exams, on the clock
+  - src: ./shots/gokaku/09-results-map.webp
+    srcDark: ./shots/gokaku/09-results-map-dark.webp
+    alt: A finished mock exam scored 47 out of 50, with all fifty questions as a grid and the traps that caught the three misses
+    caption: Your whole paper on one screen
     device: iphone
     framed: true
-  - src: ./shots/gokaku/06-analytics.webp
-    srcDark: ./shots/gokaku/06-analytics-dark.webp
-    alt: Accuracy broken down by trap type, worst first, above the exam history
+  - src: ./shots/gokaku/03-tricks.webp
+    srcDark: ./shots/gokaku/03-tricks-dark.webp
+    alt: Accuracy broken down by trap type, worst first, above the exam trend and coverage across the thirteen topics
     caption: Which traps keep catching you
     device: iphone
     framed: true
@@ -225,7 +229,7 @@ ja:
     - 学習はここから
     - 本番と同じ○×形式
     - 答えの根拠となる条文
-    - 時間を計った模擬試験
+    - 50問の答案が一画面に
     - どの型に引っかかるか
   body: >-
     手間の大半はアプリ本体ではなく、問題の生成パイプラインにかかっています。
@@ -247,13 +251,15 @@ ja:
     本アプリの模擬試験に合格しても、実際の試験の合格を保証するものではありません。
     交通ルールは改正されます。最新の要件は必ずお住まいの都道府県の運転免許センターで
     ご確認ください。
+  # Both lines are the app's own Japanese strings for GS-045, copied from the
+  # bank's ja localisation — not translated back from the English above.
   sample:
     claim: >-
-      この標識は自動車の最低速度を指定するものであり、示された数値より遅い速度で
-      運転してはならない。
+      この標識は、自動車と路面電車の最高速度を指定し、原動機付自転車には
+      時速30キロメートル以下の最高速度を指定するものである。
     note: >-
-      標識324は自動車の最低速度を指定します。数字の下に引かれた下線によって、
-      最高速度標識（323）と区別されます。
+      標識323（最高速度）は、自動車と路面電車の最高速度を指定するものです。
+      なお、原動機付自転車には時速30キロメートル以下の最高速度が指定されます。
   notes:
     - term: 固定した版
       body: >-

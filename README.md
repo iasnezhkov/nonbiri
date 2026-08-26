@@ -12,9 +12,9 @@ driven by generated design tokens, and no webfonts.
 repetition in one offline-first iPad app, all running on a single progress
 record. A six-section teacher side sits on the same data.
 
-**Gokaku** — a free offline trainer for Japan's written driving exams. Each of
-its 774 true/false questions carries a verbatim quote from the National Police
-Agency rulebook the exam is written from.
+**Gokaku** — a free offline trainer for Japan's written driving exams, on the
+App Store. Each of its 932 true/false questions carries a verbatim quote from
+the National Police Agency rulebook the exam is written from.
 
 ```bash
 npm install
@@ -172,6 +172,16 @@ preference is only written by the switch, so nothing carries them back.
 
 **`PROBE` in `scripts/shoot.ts` tracks the stylesheet.** Pointed at class names
 that no longer exist it matches nothing and reports "clean" forever.
+
+**The share cards read the app content, they do not restate it.**
+`scripts/build-og.ts` runs outside Astro, so it parses the frontmatter of
+`src/content/apps/*.md` itself — top-level scalars only, anchored to column one,
+which is what stops the nested `ja.name` from being read as the app's name. The
+status label comes from `src/lib/status.ts`, shared with the four pages that
+print it. All of this replaces four hardcoded card definitions, one of which had
+already drifted: the Gokaku card still announced "Final testing" once the app
+was on the App Store, and no gate could see it, because regenerating a card from
+stale constants reproduces the stale card byte for byte.
 
 **TypeScript stays on 6.x.** The version is pinned exactly, not caret-ranged. The
 7.x native compiler does not expose the programmatic Language Service API that

@@ -15,7 +15,7 @@ const ARTEFACTS: Artefact[] = [
   },
   {
     out: 'public/og',
-    sources: ['scripts/build-og.ts', 'tokens.json', 'src/content/apps'],
+    sources: ['scripts/build-og.ts', 'src/lib/status.ts', 'tokens.json', 'src/content/apps'],
     command: 'npm run og',
   },
 ];

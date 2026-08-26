@@ -6,6 +6,7 @@ import { getCollection, render } from 'astro:content';
 import Fresh from '../layouts/Fresh.astro';
 import { profile } from '../data/cv.ts';
 import { softwareApplicationSchema } from '../lib/apps.ts';
+import { STATUS } from '../lib/status.ts';
 
 interface Props { app: CollectionEntry<'apps'> }
 
@@ -17,12 +18,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 const { app } = Astro.props;
 const d = app.data;
 const { Content } = await render(app);
-
-const STATUS = {
-  'in-development': 'In development',
-  testing: 'Final testing',
-  released: 'Available',
-} as const;
 
 const groups = d.facts.reduce<{ name: string; items: typeof d.facts }[]>((out, fact) => {
   const name = fact.group ?? '';
@@ -36,6 +31,7 @@ const isPhone = d.shots[0]?.device === 'iphone';
 const LEAD_W = isPhone ? 520 : 1100;
 const REST_W = isPhone ? 280 : 620;
 const lead = d.shots[d.hero] ?? d.shots[0];
+const store = d.links.appStore;
 
 const schema = softwareApplicationSchema(d, {
   name: d.name,
@@ -59,13 +55,19 @@ const schema = softwareApplicationSchema(d, {
       {d.kanji && <div class="opener__spine vertical vertical--huge mincho" aria-hidden="true">{d.kanji}</div>}
 
       <div class="opener__type">
-        <p class="micro micro--accent">{STATUS[d.status]}</p>
+        <p class="micro micro--accent">{STATUS.en[d.status]}</p>
         <h1 class="mag-1 mt-md">{d.name}</h1>
         <p class="mag-3 mt-lg">{d.tagline}</p>
         <p class="read mt-xl">{d.summary}</p>
         <p class="micro mt-xl">{d.platforms.join(' · ')}</p>
 
-        {d.status !== 'released' && (
+        {store && (
+          <p class="micro mt-lg">
+            <a class="link" href={store} target="_blank" rel="noopener">Download on the App Store</a>
+          </p>
+        )}
+
+        {!store && d.status !== 'released' && (
           <p class="micro mt-lg">
             <a
               class="link"

@@ -1,23 +1,83 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { chromium } from 'playwright';
+import { STATUS, type Status } from '../src/lib/status.ts';
+import type { BrandName } from '../src/styles/tokens.d.ts';
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const outDir = path.join(root, 'public', 'og');
+const appsDir = path.join(root, 'src', 'content', 'apps');
+
+interface Shade {
+  light: string;
+}
+
+type Ink = 'paper' | 'paperDeep' | 'ink' | 'inkSoft' | 'faint';
 
 const tokens = JSON.parse(await readFile(path.join(root, 'tokens.json'), 'utf8'));
-const core = tokens.color.core;
-const brands = tokens.color.brand;
+const core: Record<Ink, Shade> = tokens.color.core;
+const brands: Record<BrandName, { accent: Shade }> = tokens.color.brand;
 
 interface Card {
   slug: string;
-  brand: keyof typeof brands;
+  brand: BrandName;
   eyebrow: string;
   title: string;
   kanji?: string;
   subtitle: string;
 }
+
+const FOLDED = new Set(['>', '>-', '|', '|-']);
+
+const field = (frontmatter: string, key: string): string => {
+  const opening = new RegExp(`^${key}: +(.+)$`, 'm').exec(frontmatter);
+  if (!opening) return '';
+
+  const value = opening[1]!.trim();
+  if (!FOLDED.has(value)) return value.replace(/^["']|["']$/g, '');
+
+  const after = frontmatter.slice(opening.index + opening[0].length).split('\n').slice(1);
+
+  const lines: string[] = [];
+  for (const line of after) {
+    if (!/^\s+\S/.test(line)) break;
+    lines.push(line.trim());
+  }
+  return lines.join(' ');
+};
+
+const appCards = async (): Promise<Card[]> => {
+  const files = (await readdir(appsDir)).filter((name) => name.endsWith('.md'));
+
+  const cards = await Promise.all(
+    files.map(async (name) => {
+      const source = await readFile(path.join(appsDir, name), 'utf8');
+      const frontmatter = /^---\n([\s\S]*?)\n---/.exec(source)?.[1] ?? '';
+      const brand = field(frontmatter, 'brand') as BrandName;
+      const kanji = field(frontmatter, 'kanji');
+      const eyebrow = STATUS.en[field(frontmatter, 'status') as Status];
+      const title = field(frontmatter, 'name');
+      const subtitle = field(frontmatter, 'tagline');
+
+      if (!brand || !eyebrow || !title || !subtitle) {
+        throw new Error(`${name}: needs a brand, a status, a name and a tagline to make a card`);
+      }
+
+      return {
+        slug: brand,
+        brand,
+        eyebrow,
+        title,
+        ...(kanji ? { kanji } : {}),
+        subtitle,
+        order: Number(field(frontmatter, 'order')),
+      };
+    }),
+  );
+
+  return cards.sort((a, b) => a.order - b.order).map(({ order, ...card }) => card);
+};
 
 const CARDS: Card[] = [
   {
@@ -27,22 +87,7 @@ const CARDS: Card[] = [
     title: 'Small apps,\nunhurried.',
     subtitle: 'Two apps for studying in Japan',
   },
-  {
-    slug: 'suji',
-    brand: 'suji',
-    eyebrow: 'In development',
-    title: 'Suji',
-    kanji: '筋',
-    subtitle: 'One iPad app for studying Japanese',
-  },
-  {
-    slug: 'gokaku',
-    brand: 'gokaku',
-    eyebrow: 'Final testing',
-    title: 'Gokaku',
-    kanji: '合格',
-    subtitle: 'A trainer for Japan’s written driving exam',
-  },
+  ...(await appCards()),
   {
     slug: 'about',
     brand: 'nonbiri',

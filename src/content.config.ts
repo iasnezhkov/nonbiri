@@ -64,6 +64,8 @@ const apps = defineCollection({
       links: z
         .object({
           appStore: z.url().optional(),
+          /** The same listing pinned to the Japanese storefront, for /ja pages. */
+          appStoreJa: z.url().optional(),
           playStore: z.url().optional(),
           testFlight: z.url().optional(),
         })

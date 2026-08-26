@@ -5,6 +5,7 @@ import Fresh from '../../layouts/Fresh.astro';
 import Shot from '../../components/Shot.astro';
 import { profile } from '../../data/cv.ts';
 import { isTranslated, softwareApplicationSchema, type TranslatedApp } from '../../lib/apps.ts';
+import { STATUS } from '../../lib/status.ts';
 
 interface Props { app: TranslatedApp }
 
@@ -19,12 +20,6 @@ const { app } = Astro.props;
 const d = app.data;
 const ja = d.ja;
 
-const STATUS = {
-  'in-development': '開発中',
-  testing: '最終テスト中',
-  released: '公開中',
-} as const;
-
 const groups = d.facts.reduce<{ name: string; items: typeof d.facts }[]>((out, fact) => {
   const name = ja.factGroups[fact.group ?? ''] ?? fact.group ?? '';
   const last = out.at(-1);
@@ -37,6 +32,7 @@ const isPhone = d.shots[0]?.device === 'iphone';
 const LEAD_W = isPhone ? 520 : 1100;
 const REST_W = isPhone ? 280 : 620;
 const lead = d.shots[d.hero] ?? d.shots[0];
+const store = d.links.appStoreJa ?? d.links.appStore;
 
 const paragraphs = ja.body.split(/\n\s*\n/).filter(Boolean);
 
@@ -59,13 +55,19 @@ const schema = softwareApplicationSchema(d, {
       )}
 
       <div class="opener__type">
-        <p class="micro micro--accent">{STATUS[d.status]}</p>
+        <p class="micro micro--accent">{STATUS.ja[d.status]}</p>
         <h1 class="mag-1 mt-md">{ja.name}</h1>
         <p class="mag-3 mt-lg">{ja.tagline}</p>
         <p class="read mt-xl">{ja.summary}</p>
         <p class="micro mt-xl">{d.platforms.join(' · ')}</p>
 
-        {d.status !== 'released' && (
+        {store && (
+          <p class="micro mt-lg">
+            <a class="link" href={store} target="_blank" rel="noopener">App Store で入手</a>
+          </p>
+        )}
+
+        {!store && d.status !== 'released' && (
           <p class="micro mt-lg">
             <a
               class="link"

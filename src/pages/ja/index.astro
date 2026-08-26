@@ -3,17 +3,12 @@ import { getCollection } from 'astro:content';
 import Fresh from '../../layouts/Fresh.astro';
 import { isTranslated } from '../../lib/apps.ts';
 import Shot from '../../components/Shot.astro';
+import { STATUS } from '../../lib/status.ts';
 
 const apps = (await getCollection('apps'))
   .filter(isTranslated)
   .sort((a, b) => a.data.order - b.data.order)
   .map((app) => ({ app, hero: app.data.shots[app.data.hero] ?? app.data.shots[0] }));
-
-const STATUS = {
-  'in-development': '開発中',
-  testing: '最終テスト中',
-  released: '公開中',
-} as const;
 
 const schema = {
   '@context': 'https://schema.org',
@@ -55,7 +50,7 @@ const schema = {
       <section class="spread grid">
         <div class={index % 2 === 0 ? 'col-c' : 'col-d'}>
           <p class="micro micro--accent">
-            {String(index + 1).padStart(2, '0')} — {STATUS[app.data.status]}
+            {String(index + 1).padStart(2, '0')} — {STATUS.ja[app.data.status]}
           </p>
           <a href={`/ja/${app.id}`}>
             <h2 class="mag-2 mt-md">{app.data.ja.name}</h2>

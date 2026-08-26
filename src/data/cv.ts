@@ -39,7 +39,7 @@ export const profile = {
   name: 'Ilia Snezhkov',
   headline: 'Senior Software Engineer — Backend & Platform',
   specialisation: 'Application Security',
-  email: 'iasnezhkov@gmail.com',
+  email: 'iasnezhkov@nonbiri.dev',
   links: {
     site: 'https://nonbiri.dev',
     github: 'https://github.com/iasnezhkov',
@@ -359,13 +359,13 @@ export const projects = [
     name: 'Gokaku',
     href: '/gokaku',
     summary:
-      "Offline trainer for Japan’s written driving-licence exams, iOS and Android. 774 true/false questions, each carrying a verbatim quote from the National Police Agency rulebook and machine-verified against that corpus; 208 official sign images; twelve languages; no account, no network, no data collected.",
+      "Offline trainer for Japan’s written driving-licence exams, on the App Store. 932 true/false questions, each carrying a verbatim quote from the National Police Agency rulebook and machine-verified against that corpus; 208 official sign images; twelve languages; no account, no network, no data collected.",
     tech: ['Flutter', 'Dart', 'Kotlin/Android', 'Python'],
     ja: {
       name: '合格',
       href: '/ja/gokaku',
       summary:
-        '日本の運転免許学科試験のためのオフライン練習アプリ、iOS と Android 向け。774問の ○/× 形式で、すべての設問が警察庁の教則からの逐語引用を伴い、その原文に対して機械的に照合されています。公式の標識画像 208点、12 言語対応、アカウントなし・通信なし・データ収集なし。',
+        '日本の運転免許学科試験のためのオフライン練習アプリ、App Store で公開中。932問の ○/× 形式で、すべての設問が警察庁の教則からの逐語引用を伴い、その原文に対して機械的に照合されています。公式の標識画像 208点、12 言語対応、アカウントなし・通信なし・データ収集なし。',
     },
   },
 ] as const;

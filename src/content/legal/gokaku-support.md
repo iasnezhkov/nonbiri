@@ -2,13 +2,13 @@
 title: Support
 app: gokaku
 kind: support
-effectiveDate: 2026-08-01
+effectiveDate: 2026-08-26
 version: '1.0'
 ---
 
 ## Getting help
 
-Email [iasnezhkov@gmail.com](mailto:iasnezhkov@gmail.com). Include your device,
+Email [support@nonbiri.dev](mailto:support@nonbiri.dev). Include your device,
 OS version and the app version from Settings — most questions can then be answered
 in one reply.
 

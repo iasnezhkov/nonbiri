@@ -3,7 +3,7 @@ title: サポート
 app: gokaku
 kind: support
 lang: ja
-effectiveDate: 2026-08-01
+effectiveDate: 2026-08-26
 version: '1.0'
 ---
 
@@ -11,7 +11,7 @@ version: '1.0'
 
 ## お問い合わせ
 
-[iasnezhkov@gmail.com](mailto:iasnezhkov@gmail.com) までメールでご連絡ください。お使いの端末、OS のバージョン、および設定画面に表示されるアプリのバージョンをお書き添えいただければ、たいていのご質問には一度の返信でお答えできます。
+[support@nonbiri.dev](mailto:support@nonbiri.dev) までメールでご連絡ください。お使いの端末、OS のバージョン、および設定画面に表示されるアプリのバージョンをお書き添えいただければ、たいていのご質問には一度の返信でお答えできます。
 
 ## 誤った解答の報告
 

@@ -3,7 +3,7 @@ title: 利用規約
 app: suji
 kind: terms
 lang: ja
-effectiveDate: 2026-08-09
+effectiveDate: 2026-08-26
 version: '1.0'
 ---
 
@@ -55,4 +55,4 @@ version: '1.0'
 
 ## 連絡先
 
-[iasnezhkov@gmail.com](mailto:iasnezhkov@gmail.com)
+[support@nonbiri.dev](mailto:support@nonbiri.dev)

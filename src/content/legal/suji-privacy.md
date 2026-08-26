@@ -2,8 +2,8 @@
 title: Privacy Policy
 app: suji
 kind: privacy
-effectiveDate: 2026-08-01
-version: '0.9'
+effectiveDate: 2026-08-26
+version: '1.0'
 ---
 
 Suji does not track you and does not sell or share anything with advertisers.
@@ -66,4 +66,4 @@ the local copy.
 
 ## Contact
 
-[iasnezhkov@gmail.com](mailto:iasnezhkov@gmail.com)
+[support@nonbiri.dev](mailto:support@nonbiri.dev)

@@ -2,7 +2,7 @@
 title: Privacy Policy
 app: gokaku
 kind: privacy
-effectiveDate: 2026-08-01
+effectiveDate: 2026-08-26
 version: '1.0'
 ---
 
@@ -67,4 +67,4 @@ If this policy changes, the date above will change with it.
 
 ## Contact
 
-[iasnezhkov@gmail.com](mailto:iasnezhkov@gmail.com)
+[support@nonbiri.dev](mailto:support@nonbiri.dev)

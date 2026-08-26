@@ -3,7 +3,7 @@ title: プライバシーポリシー
 app: gokaku
 kind: privacy
 lang: ja
-effectiveDate: 2026-08-01
+effectiveDate: 2026-08-26
 version: '1.0'
 ---
 
@@ -51,4 +51,4 @@ App Tracking Transparency に基づくトラッキング、広告識別子、解
 
 ## 連絡先
 
-[iasnezhkov@gmail.com](mailto:iasnezhkov@gmail.com)
+[support@nonbiri.dev](mailto:support@nonbiri.dev)

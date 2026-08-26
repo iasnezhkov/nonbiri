@@ -3,7 +3,7 @@ title: サポート
 app: suji
 kind: support
 lang: ja
-effectiveDate: 2026-08-01
+effectiveDate: 2026-08-26
 version: '1.0'
 ---
 
@@ -11,7 +11,7 @@ version: '1.0'
 
 ## お問い合わせ
 
-[iasnezhkov@gmail.com](mailto:iasnezhkov@gmail.com) までメールでご連絡ください。お使いの端末、iPadOS / iOS / macOS のバージョン、および設定画面に表示されるアプリのバージョンをお書き添えください。三往復かかるやり取りが、一度の返信で済むようになります。
+[support@nonbiri.dev](mailto:support@nonbiri.dev) までメールでご連絡ください。お使いの端末、iPadOS / iOS / macOS のバージョン、および設定画面に表示されるアプリのバージョンをお書き添えください。三往復かかるやり取りが、一度の返信で済むようになります。
 
 ## 不具合の報告
 
@@ -19,4 +19,4 @@ version: '1.0'
 
 ## データとアカウントに関するお問い合わせ
 
-アカウントの削除、データの書き出しのご請求、その他データに関するご相談は [iasnezhkov@gmail.com](mailto:iasnezhkov@gmail.com) まで。何がどこに保存されるかは[プライバシーポリシー](/ja/suji/privacy)をご覧ください。
+アカウントの削除、データの書き出しのご請求、その他データに関するご相談は [support@nonbiri.dev](mailto:support@nonbiri.dev) まで。何がどこに保存されるかは[プライバシーポリシー](/ja/suji/privacy)をご覧ください。

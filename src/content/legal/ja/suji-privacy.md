@@ -3,8 +3,8 @@ title: プライバシーポリシー
 app: suji
 kind: privacy
 lang: ja
-effectiveDate: 2026-08-01
-version: '0.9'
+effectiveDate: 2026-08-26
+version: '1.0'
 ---
 
 <!-- One line per paragraph. See src/content/legal/ja/gokaku-privacy.md. -->
@@ -52,4 +52,4 @@ version: '0.9'
 
 ## 連絡先
 
-[iasnezhkov@gmail.com](mailto:iasnezhkov@gmail.com)
+[support@nonbiri.dev](mailto:support@nonbiri.dev)

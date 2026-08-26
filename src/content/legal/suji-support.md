@@ -2,13 +2,13 @@
 title: Support
 app: suji
 kind: support
-effectiveDate: 2026-08-01
+effectiveDate: 2026-08-26
 version: '1.0'
 ---
 
 ## Getting help
 
-Email [iasnezhkov@gmail.com](mailto:iasnezhkov@gmail.com). Include your device,
+Email [support@nonbiri.dev](mailto:support@nonbiri.dev). Include your device,
 iPadOS/iOS/macOS version and the app version from Settings — it makes most
 questions answerable in one reply instead of three.
 
@@ -21,5 +21,5 @@ rest.
 ## Data and account questions
 
 Account deletion, export requests and anything else about your data:
-[iasnezhkov@gmail.com](mailto:iasnezhkov@gmail.com). See the
+[support@nonbiri.dev](mailto:support@nonbiri.dev). See the
 [privacy policy](/suji/privacy) for what is stored where.

@@ -2,7 +2,7 @@
 title: Terms of Use
 app: suji
 kind: terms
-effectiveDate: 2026-08-09
+effectiveDate: 2026-08-26
 version: '1.0'
 ---
 
@@ -78,4 +78,4 @@ rather than sourced.
 
 ## Contact
 
-[iasnezhkov@gmail.com](mailto:iasnezhkov@gmail.com)
+[support@nonbiri.dev](mailto:support@nonbiri.dev)

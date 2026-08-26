@@ -3,7 +3,7 @@ title: 利用規約
 app: gokaku
 kind: terms
 lang: ja
-effectiveDate: 2026-08-01
+effectiveDate: 2026-08-26
 version: '1.0'
 ---
 
@@ -43,4 +43,4 @@ version: '1.0'
 
 ## 連絡先
 
-[iasnezhkov@gmail.com](mailto:iasnezhkov@gmail.com)
+[support@nonbiri.dev](mailto:support@nonbiri.dev)

@@ -2,7 +2,7 @@
 
 ## Reporting
 
-Email **iasnezhkov@gmail.com**. The same address is published at
+Email **iasnezhkov@nonbiri.dev**. The same address is published at
 [`/.well-known/security.txt`](https://nonbiri.dev/.well-known/security.txt).
 
 Include the URL or file, what you did, and what happened. A proof of concept is

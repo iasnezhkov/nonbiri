@@ -378,16 +378,13 @@ export const projects = [
 export const research = {
   name: 'MindOne — device support for a MediaTek phone',
   href: '/mindone',
-  repos: [
-    'https://github.com/iasnezhkov/android_kernel_ikko_mindone',
-    'https://github.com/iasnezhkov/android_device_ikko_mindone',
-  ],
   reposLabel: 'github.com/iasnezhkov — kernel · device tree',
   summary:
     'A retail Android phone on a MediaTek Helio G99, sold on Linux 5.10 with no published source for its kernel, device tree or hardware abstraction layers. Hand-ported it to Linux 6.12 by way of 6.1, rebuilding the device tree out of the stock compiled blob and carrying 339 out-of-tree driver trees, 290 of them loading on the running phone. Above the kernel, rewrote closed userspace in the open — an audio HAL, a sensors HAL and four HIDL→AIDL bridges — so the device can be tuned and carried onto later Android releases. Two repositories: the 6.12 kernel current, the 6.1 port archived. It is the phone I carry.',
   tech: ['Linux 6.12', 'C', 'AArch64', 'Android GKI/KMI', 'Device Tree', 'Ghidra', 'AOSP', 'LineageOS'],
   ja: {
     name: 'MindOne — MediaTek 端末のデバイスサポート',
+    href: '/ja/mindone',
     summary:
       'MediaTek Helio G99 を積んだ市販の Android 端末です。出荷時は Linux 5.10 で、カーネルもデバイスツリーも HAL もソースは公開されていませんでした。6.1 を経て Linux 6.12 まで手作業で移植し、デバイスツリーは出荷時のバイナリから復元。カーネル外のドライバは 339 ツリーあり、うち 290 モジュールが実機で読み込まれます。カーネルより上のクローズドな実装もオープンに書き直しています — 音声 HAL、センサー HAL、HIDL→AIDL ブリッジ 4 本。最適化の余地を残し、将来の Android にも載せるためです。公開は 2 リポジトリで、6.12 が現行、6.1 の移植はアーカイブ。普段使いの端末です。',
   },

@@ -128,7 +128,7 @@ English, a hole in the middle of a word in Japanese. Frontmatter is repaired in
 the schema (`src/lib/cjk.ts`, applied by `content.config.ts`); markdown bodies and
 `.astro` templates have no hook to do that in, so they are written unwrapped.
 
-## The MindOne section, and why it is English-only for now
+## The MindOne section
 
 It is a third *kind* of thing, not a third app, so it does not go in the `apps`
 collection: no store listing, no platforms, no release status, and a schema built
@@ -145,13 +145,13 @@ these pages was assembled by reading the device project's working notes instead
 live ones — and it published a support matrix that was wrong about four
 subsystems. Change a claim here only against something the repositories state.
 
-**The masthead and footer links to it are wrapped in `lang === 'en'`.** Every
-other route exists in both languages, and the switch is never a dead control;
-this section does not exist in Japanese yet, so a Japanese page linking to it
-would throw the reader into English with nothing to carry them back. The layout
-already handles the reverse case on its own — with no `alternate` passed, 日本語
-renders disabled with a title saying why. Delete the two `lang === 'en'` guards
-the day the Japanese pages land, not before.
+**It exists in both languages**, like every other route, so the language switch
+is never a dead control. `/ja/mindone` is a second template over the same record:
+the numbers, the states and the ordering are written once and only prose carries
+a `ja` half, which is the split the app pages use. Japanese written into an
+`.astro` template has no `foldCjk` hook to undo line folding, so those strings
+stay on one line however long they run — a wrapped Japanese sentence renders with
+a space in the middle of it.
 
 **The support matrix is data, not prose.** Rows carry a state (`works` /
 `partial` / `none`) and a note; the mark, its colour and the accessible label all

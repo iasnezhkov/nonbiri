@@ -1,19 +1,33 @@
 ---
-interface Props { tight?: boolean | undefined }
-const { tight = false } = Astro.props;
+interface Props { tight?: boolean | undefined; lang?: 'en' | 'ja' | undefined }
+const { tight = false, lang = 'en' } = Astro.props;
 ---
 
 <section class:list={[tight ? 'spread--tight' : 'spread', 'no-print']}>
-  <p class="micro">Disclaimer</p>
-  <p class="note mt-lg">
-    Everything on these pages is provided as is, with no warranty of any kind, express or
-    implied. Unlocking a bootloader, flashing partitions and running the tools linked here can
-    erase all your data and permanently disable your phone. <strong>You do this at your own risk
-    and on your own responsibility.</strong> The author accepts no liability for any loss or
-    damage, to your device or otherwise, arising from following anything written here.
-  </p>
-  <p class="note mt-md">
-    A personal research project on a device bought at retail, describing what happened on one
-    unit. Not affiliated with, endorsed by, or supported by iKKO or MediaTek.
-  </p>
+  {lang === 'ja' ? (
+    <>
+      <p class="micro">免責事項</p>
+      <p class="note mt-lg">
+        このページに書かれていることは、明示・黙示を問わずいかなる保証もなく現状のまま提供されます。ブートローダーのアンロック、パーティションの書き換え、ここからリンクしているツールの実行は、端末上のすべてのデータを消し、端末を恒久的に起動不能にする可能性があります。<strong>実行はご自身の責任と判断で行ってください。</strong>ここに書かれたことに従った結果として生じた損失や損害について、端末に対するものかどうかを問わず、著者は一切の責任を負いません。
+      </p>
+      <p class="note mt-md">
+        小売で購入した端末での個人的な研究プロジェクトであり、1 台の個体で起きたことの記録です。iKKO および MediaTek とは無関係で、両社の承認も支援も受けていません。
+      </p>
+    </>
+  ) : (
+    <>
+      <p class="micro">Disclaimer</p>
+      <p class="note mt-lg">
+        Everything on these pages is provided as is, with no warranty of any kind, express or
+        implied. Unlocking a bootloader, flashing partitions and running the tools linked here can
+        erase all your data and permanently disable your phone. <strong>You do this at your own risk
+        and on your own responsibility.</strong> The author accepts no liability for any loss or
+        damage, to your device or otherwise, arising from following anything written here.
+      </p>
+      <p class="note mt-md">
+        A personal research project on a device bought at retail, describing what happened on one
+        unit. Not affiliated with, endorsed by, or supported by iKKO or MediaTek.
+      </p>
+    </>
+  )}
 </section>

@@ -42,7 +42,11 @@ const schema = {
 };
 ---
 
-<Fresh title={`MindOne — ${device.soc} device support`} description={device.blurb}>
+<Fresh
+  title={`MindOne — ${device.soc} device support`}
+  description={device.blurb}
+  alternate="/ja/mindone"
+>
   <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
 
   <div class="page">

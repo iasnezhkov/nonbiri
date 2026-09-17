@@ -60,7 +60,7 @@ vendor binaries were never built for. Published as two repositories: the 6.12 ke
 current, the 6.1 port is kept as an archive.
 
 Independent, unofficial and uncertified: no VTS or CTS run, no compatibility evidence
-claimed, and no connection to iKKO or MediaTek. English only for now.
+claimed, and no connection to iKKO or MediaTek.
 
 ## Ilia Snezhkov — /about, /cv
 
@@ -78,8 +78,8 @@ driven by exploitation signals, and automated remediation. Contact: iasnezhkov@n
 - [Gokaku](https://nonbiri.dev/gokaku): the same, plus one worked exam question with its citation
 - [About](https://nonbiri.dev/about): short professional read
 - [CV](https://nonbiri.dev/cv): full record, also at /cv.pdf
+- [MindOne](https://nonbiri.dev/mindone): the kernel and device tree, what runs on them and what does not
 - [Japanese edition](https://nonbiri.dev/ja): every page above, translated
-- [MindOne](https://nonbiri.dev/mindone): the kernel and device tree, what runs on them and what does not — English only
 
 ## Optional
 

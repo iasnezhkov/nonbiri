@@ -32,6 +32,8 @@ const T =
         who: 'イリヤ・スネシコフ',
         email: 'メール',
         colophon: '見出しは Didot、本文は OS の書体。JavaScript のバンドルなし。',
+        kernel: 'カーネル',
+        deviceTree: 'デバイスツリー',
       }
     : {
         about: 'About',
@@ -47,6 +49,8 @@ const T =
         who: 'Ilia Snezhkov',
         email: 'Email',
         colophon: 'Set in Didot and the system sans. No bundled JavaScript.',
+        kernel: 'Kernel',
+        deviceTree: 'Device tree',
       };
 const fullTitle = title.startsWith('Nonbiri') ? title : `${title} · Nonbiri`;
 
@@ -182,9 +186,9 @@ const LANGS = [
               {lang === 'ja' ? (app.data.ja?.name ?? app.data.name) : app.data.name}
             </a>
           ))}
-          {lang === 'en' && (
-            <a href="/mindone" aria-current={path.startsWith('/mindone') ? 'page' : undefined}>MindOne</a>
-          )}
+          <a href={`${root}/mindone`} aria-current={path.endsWith('/mindone') ? 'page' : undefined}>
+            MindOne
+          </a>
           <a href={`${root}/about`} aria-current={path === `${root}/about` ? 'page' : undefined}>{T.about}</a>
           <a href={`${root}/cv`} aria-current={path === `${root}/cv` ? 'page' : undefined}>{T.cv}</a>
         </nav>
@@ -207,16 +211,14 @@ const LANGS = [
             </ul>
           </div>
         ))}
-        {lang === 'en' && (
-          <div>
-            <h2>MindOne</h2>
-            <ul>
-              <li><a href="/mindone">{T.overview}</a></li>
-              <li><a href="https://github.com/iasnezhkov/android_kernel_ikko_mindone">Kernel</a></li>
-              <li><a href="https://github.com/iasnezhkov/android_device_ikko_mindone">Device tree</a></li>
-            </ul>
-          </div>
-        )}
+        <div>
+          <h2>MindOne</h2>
+          <ul>
+            <li><a href={`${root}/mindone`}>{T.overview}</a></li>
+            <li><a href="https://github.com/iasnezhkov/android_kernel_ikko_mindone">{T.kernel}</a></li>
+            <li><a href="https://github.com/iasnezhkov/android_device_ikko_mindone">{T.deviceTree}</a></li>
+          </ul>
+        </div>
         <div>
           <h2>{T.who}</h2>
           <ul>

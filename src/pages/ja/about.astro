@@ -128,13 +128,10 @@ const schema = {
     <section class="spread grid">
       <div class="col-c">
         <p class="micro">アプリのほかに</p>
-        <h2 class="mag-3 mt-lg">{research.ja.name}</h2>
+        <h2 class="mag-3 mt-lg">
+          <a class="link" href={research.ja.href}>{research.ja.name}</a>
+        </h2>
         <p class="micro mt-sm">{research.tech.join(' · ')}</p>
-        <ul class="tags mt-lg">
-          {research.repos.map((repo) => (
-            <li><a class="link" href={repo}>{repo.split('/').at(-1)}</a></li>
-          ))}
-        </ul>
       </div>
       <div class="col-d">
         <p class="note">{research.ja.summary}</p>

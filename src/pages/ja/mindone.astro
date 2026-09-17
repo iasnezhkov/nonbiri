@@ -1,0 +1,244 @@
+---
+import Fresh from '../../layouts/Fresh.astro';
+import Liability from '../../components/Liability.astro';
+import {
+  MARK,
+  REPO_LABEL_JA,
+  SUPPORT_LABEL_JA,
+  built,
+  copy,
+  device,
+  figures,
+  grouped,
+  repos,
+  support,
+  tech,
+  tested,
+  updated,
+} from '../../data/mindone.ts';
+
+const groups = grouped(figures.map((figure) => ({ ...figure, group: figure.ja.group })));
+
+const updatedOn = new Intl.DateTimeFormat('ja-JP', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: `${device.name} — kernel and device tree`,
+  headline: device.ja.tagline,
+  description: device.ja.blurb,
+  url: new URL('/ja/mindone', Astro.site).href,
+  codeRepository: repos.map((repo) => repo.href),
+  programmingLanguage: ['C', 'C++'],
+  runtimePlatform: 'Android',
+  inLanguage: 'ja',
+  dateModified: updated.toISOString().slice(0, 10),
+  keywords: tech.join(', '),
+  author: { '@type': 'Person', name: 'Ilia Snezhkov', url: 'https://nonbiri.dev/about' },
+};
+---
+
+<Fresh
+  title={`MindOne — ${device.soc} のデバイスサポート`}
+  description={device.ja.blurb}
+  lang="ja"
+  alternate="/mindone"
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+
+  <div class="page">
+    <section class="opener">
+      <div class="opener__field"></div>
+
+      <div class="opener__type">
+        <p class="micro micro--accent">独立したデバイスサポート · MediaTek {device.soc}</p>
+        <h1 class="mag-1 mt-md">MindOne</h1>
+        <p class="mag-3 mt-lg">{device.ja.tagline}</p>
+        <p class="read mt-xl">{device.ja.summary}</p>
+        <p class="micro mt-xl">
+          <span>進行中 · 最終更新 </span>
+          <time datetime={updated.toISOString()}>{updatedOn.format(updated)}</time>
+        </p>
+      </div>
+
+      <div class="opener__aside">
+        <p class="micro">公開済み</p>
+        <ul class="ship mt-lg">
+          {repos.map((repo) => (
+            <li>
+              <p class="ship__name"><a class="link" href={repo.href}>{repo.name}</a></p>
+              <p class="ship__meta">
+                <span class="micro">{repo.version}</span>
+                <span class="flag" data-state={repo.state}>
+                  {REPO_LABEL_JA[repo.state]}
+                </span>
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <section class="statement statement--soft">
+    <div class="page">
+      <p class="micro">この仕事が実際に何だったか</p>
+      <p class="statement__t mt-lg">
+        ソースが公開されていない端末は、ロックされた端末ではありません。ドライバを書かないかぎり、そもそもドライバが存在しない端末です。
+      </p>
+      <p class="note mt-xl">{device.ja.statement}</p>
+    </div>
+  </section>
+
+  <div class="page">
+    <section class="spread">
+      <p class="micro">設定ではなく、書いたもの</p>
+      <p class="read mt-lg">
+        代わりにあったのがバイナリだったので存在する 7 つ。出発点となるソースがそもそもなかったか、動いてはいるが手を入れられないベンダーのブロブがあったかのどちらかです。
+      </p>
+      <div class="entries mt-2xl">
+        {built.map((item, index) => (
+          <article class="entry">
+            <div class="entry__n">{String(index + 1).padStart(2, '0')}</div>
+            <div class="entry__t">
+              <h2 class="mag-3">{item.ja.name}</h2>
+              <p class="micro mt-sm">{item.ja.scale}</p>
+            </div>
+            <p class="entry__b note">{item.ja.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <div class="page">
+    <section class="spread">
+      <p class="micro">その上で端末は何ができるか</p>
+      <table class="matrix mt-2xl">
+        <caption class="visually-hidden">6.12 カーネルでのハードウェア対応状況</caption>
+        <thead>
+          <tr>
+            <th scope="col"><span class="visually-hidden">State</span></th>
+            <th scope="col">サブシステム</th>
+            <th scope="col">備考</th>
+          </tr>
+        </thead>
+        <tbody>
+          {support.map((row) => (
+            <tr data-state={row.state}>
+              <td class="matrix__mark">
+                <span aria-hidden="true">{MARK[row.state]}</span>
+                <span class="visually-hidden">{SUPPORT_LABEL_JA[row.state]}</span>
+              </td>
+              <th scope="row">{row.ja.subsystem}</th>
+              <td class="matrix__note">{row.ja.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <p class="matrix__legend mt-lg">
+        <span data-state="works"><span aria-hidden="true">●</span> 動作</span>
+        <span data-state="partial"><span aria-hidden="true">◐</span> 未完成</span>
+        <span data-state="none"><span aria-hidden="true">○</span> 未対応</span>
+      </p>
+      <p class="note mt-lg">
+        どの行も実機で実際に使ったという意味で、ドライバがバインドしたとかデバイスノードが現れたという意味ではありません。かつてまさにその根拠で「動作」と記録したサブシステムが 3 つあり、3 つとも動いていませんでした。
+      </p>
+    </section>
+  </div>
+
+  <div class="page">
+    <section class="spread grid">
+      <div class="col-c">
+        <p class="micro">動かしている端末</p>
+        <p class="note mt-lg">{device.ja.about}</p>
+        <dl class="spec mt-2xl">
+          {device.specs.map((spec) => (
+            <div class="spec__row">
+              <dt>{spec.ja.label}</dt>
+              <dd>{spec.ja.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <div class="col-d">
+        <p class="micro">数字で見る</p>
+        <div class="figures mt-2xl">
+          {groups.map((group) => (
+            <div class="figures__group">
+              <div class="figures__name">{group.name}</div>
+              <div class="figures__items">
+                {group.items.map((figure) => (
+                  <div class="figure"><b>{figure.value}</b><span>{figure.ja.label}</span></div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="page">
+    <section class="spread grid">
+      <div class="col-c">
+        <p class="micro">検証したこと、していないこと</p>
+        <p class="read mt-lg">
+          一人による独立した立ち上げです。粗いところがあるものと考え、おかしな挙動はたいてい既知だと思って構いません。工場出荷ファームウェアに戻す手段は必ず確保してください。
+        </p>
+      </div>
+      <div class="col-d">
+        <dl class="spec mt-lg">
+          {tested.map((row) => (
+            <div class="spec__row">
+              <dt>{row.ja.label}</dt>
+              <dd>{row.ja.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  </div>
+
+  <div class="page">
+    <section class="spread">
+      <p class="micro">どう公開しているか</p>
+      <p class="read mt-lg">{copy.ja.source}</p>
+      <div class="entries mt-2xl">
+        {repos.map((repo, index) => (
+          <article class="entry">
+            <div class="entry__n">{String(index + 1).padStart(2, '0')}</div>
+            <div class="entry__t">
+              <h2 class="mag-3"><a class="link" href={repo.href}>{repo.name}</a></h2>
+              <p class="micro mt-sm">
+                <span>{repo.version} · </span>
+                <span class="flag" data-state={repo.state}>
+                  {REPO_LABEL_JA[repo.state]}
+                </span>
+              </p>
+            </div>
+            <p class="entry__b note">{repo.ja.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="spread--tight grid">
+      <div class="col-c">
+        <p class="micro">公開しないもの</p>
+        <p class="note mt-lg">{copy.ja.notPublished}</p>
+      </div>
+      <div class="col-d">
+        <p class="micro">使用技術</p>
+        <ul class="tags mt-md">{tech.map((item) => <li>{item}</li>)}</ul>
+      </div>
+    </section>
+
+    <Liability tight lang="ja" />
+  </div>
+</Fresh>

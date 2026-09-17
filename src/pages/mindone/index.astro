@@ -1,0 +1,245 @@
+---
+import Fresh from '../../layouts/Fresh.astro';
+import Liability from '../../components/Liability.astro';
+import {
+  MARK,
+  REPO_LABEL,
+  SUPPORT_LABEL,
+  built,
+  copy,
+  device,
+  figures,
+  grouped,
+  repos,
+  support,
+  tech,
+  tested,
+  updated,
+} from '../../data/mindone.ts';
+
+const groups = grouped(figures);
+
+const updatedOn = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: `${device.name} — kernel and device tree`,
+  headline: device.tagline,
+  description: device.blurb,
+  url: new URL('/mindone', Astro.site).href,
+  codeRepository: repos.map((repo) => repo.href),
+  programmingLanguage: ['C', 'C++'],
+  runtimePlatform: 'Android',
+  inLanguage: 'en',
+  dateModified: updated.toISOString().slice(0, 10),
+  keywords: tech.join(', '),
+  author: { '@type': 'Person', name: 'Ilia Snezhkov', url: 'https://nonbiri.dev/about' },
+};
+---
+
+<Fresh title={`MindOne — ${device.soc} device support`} description={device.blurb}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+
+  <div class="page">
+    <section class="opener">
+      <div class="opener__field"></div>
+
+      <div class="opener__type">
+        <p class="micro micro--accent">Independent device support · MediaTek {device.soc}</p>
+        <h1 class="mag-1 mt-md">MindOne</h1>
+        <p class="mag-3 mt-lg">{device.tagline}</p>
+        <p class="read mt-xl">{device.summary}</p>
+        <p class="micro mt-xl">
+          <span>Ongoing · last updated </span>
+          <time datetime={updated.toISOString()}>{updatedOn.format(updated)}</time>
+        </p>
+      </div>
+
+      <div class="opener__aside">
+        <p class="micro">Published</p>
+        <ul class="ship mt-lg">
+          {repos.map((repo) => (
+            <li>
+              <p class="ship__name"><a class="link" href={repo.href}>{repo.name}</a></p>
+              <p class="ship__meta">
+                <span class="micro">{repo.version}</span>
+                <span class="flag" data-state={repo.state}>
+                  {REPO_LABEL[repo.state]}
+                </span>
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  </div>
+
+  <section class="statement statement--soft">
+    <div class="page">
+      <p class="micro">What the work actually was</p>
+      <p class="statement__t mt-lg">
+        A phone with no published source is not a locked phone. It is a phone whose
+        drivers have to be written before it has any.
+      </p>
+      <p class="note mt-xl">{device.statement}</p>
+    </div>
+  </section>
+
+  <div class="page">
+    <section class="spread">
+      <p class="micro">Written, not configured</p>
+      <p class="read mt-lg">
+        Seven pieces that exist because the alternative was a binary — either there was no
+        source to start from at all, or there was a vendor blob that works and cannot be
+        touched.
+      </p>
+      <div class="entries mt-2xl">
+        {built.map((item, index) => (
+          <article class="entry">
+            <div class="entry__n">{String(index + 1).padStart(2, '0')}</div>
+            <div class="entry__t">
+              <h2 class="mag-3">{item.name}</h2>
+              <p class="micro mt-sm">{item.scale}</p>
+            </div>
+            <p class="entry__b note">{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <div class="page">
+    <section class="spread">
+      <p class="micro">What the phone does on it</p>
+      <table class="matrix mt-2xl">
+        <caption class="visually-hidden">Hardware support on the 6.12 kernel</caption>
+        <thead>
+          <tr>
+            <th scope="col"><span class="visually-hidden">State</span></th>
+            <th scope="col">Subsystem</th>
+            <th scope="col">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {support.map((row) => (
+            <tr data-state={row.state}>
+              <td class="matrix__mark">
+                <span aria-hidden="true">{MARK[row.state]}</span>
+                <span class="visually-hidden">{SUPPORT_LABEL[row.state]}</span>
+              </td>
+              <th scope="row">{row.subsystem}</th>
+              <td class="matrix__note">{row.note}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <p class="matrix__legend mt-lg">
+        <span data-state="works"><span aria-hidden="true">●</span> Working</span>
+        <span data-state="partial"><span aria-hidden="true">◐</span> Unfinished</span>
+        <span data-state="none"><span aria-hidden="true">○</span> Not working</span>
+      </p>
+      <p class="note mt-lg">
+        Every row means used on the hardware, not that a driver bound or a device node
+        appeared. Three subsystems were once recorded as working on exactly that evidence,
+        and all three turned out not to be.
+      </p>
+    </section>
+  </div>
+
+  <div class="page">
+    <section class="spread grid">
+      <div class="col-c">
+        <p class="micro">The device it runs on</p>
+        <p class="note mt-lg">{device.about}</p>
+        <dl class="spec mt-2xl">
+          {device.specs.map((spec) => (
+            <div class="spec__row">
+              <dt>{spec.label}</dt>
+              <dd>{spec.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <div class="col-d">
+        <p class="micro">By the numbers</p>
+        <div class="figures mt-2xl">
+          {groups.map((group) => (
+            <div class="figures__group">
+              <div class="figures__name figures__name--latin">{group.name}</div>
+              <div class="figures__items">
+                {group.items.map((figure) => (
+                  <div class="figure"><b>{figure.value}</b><span>{figure.label}</span></div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="page">
+    <section class="spread grid">
+      <div class="col-c">
+        <p class="micro">What has and has not been tested</p>
+        <p class="read mt-lg">
+          An independent bring-up by one person. Expect rough edges, treat anything unusual
+          as probably known, and keep a way back to the factory firmware.
+        </p>
+      </div>
+      <div class="col-d">
+        <dl class="spec mt-lg">
+          {tested.map((row) => (
+            <div class="spec__row">
+              <dt>{row.label}</dt>
+              <dd>{row.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  </div>
+
+  <div class="page">
+    <section class="spread">
+      <p class="micro">How it is published</p>
+      <p class="read mt-lg">{copy.source}</p>
+      <div class="entries mt-2xl">
+        {repos.map((repo, index) => (
+          <article class="entry">
+            <div class="entry__n">{String(index + 1).padStart(2, '0')}</div>
+            <div class="entry__t">
+              <h2 class="mag-3"><a class="link" href={repo.href}>{repo.name}</a></h2>
+              <p class="micro mt-sm">
+                <span>{repo.version} · </span>
+                <span class="flag" data-state={repo.state}>
+                  {REPO_LABEL[repo.state]}
+                </span>
+              </p>
+            </div>
+            <p class="entry__b note">{repo.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="spread--tight grid">
+      <div class="col-c">
+        <p class="micro">What is not published</p>
+        <p class="note mt-lg">{copy.notPublished}</p>
+      </div>
+      <div class="col-d">
+        <p class="micro">Built with</p>
+        <ul class="tags mt-md">{tech.map((item) => <li>{item}</li>)}</ul>
+      </div>
+    </section>
+
+    <Liability tight />
+  </div>
+</Fresh>

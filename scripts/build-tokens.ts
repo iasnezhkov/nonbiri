@@ -26,7 +26,7 @@ const brandEntry = z.object({
 
 const annotation = z.string();
 
-const named = <T extends z.ZodTypeAny>(value: T) => z.record(z.string(), value);
+const named = <T extends z.ZodType>(value: T) => z.record(z.string(), value);
 
 const tokensSchema = z.object({
   $meta: z.object({

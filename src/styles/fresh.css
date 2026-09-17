@@ -349,6 +349,36 @@ h3 {
   justify-self: center;
 }
 
+.opener__aside {
+  grid-column: 8 / span 5;
+  align-self: center;
+}
+
+.ship {
+  display: grid;
+  gap: clamp(var(--s-lg), 2vw, var(--s-xl));
+  list-style: none;
+  padding: 0;
+}
+
+.ship li {
+  padding-top: var(--s-md);
+  border-top: 1px solid var(--line);
+}
+
+.ship__name {
+  font-family: var(--font-display);
+  font-size: var(--t-headline);
+  line-height: var(--lh-snug);
+}
+
+.ship__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-xs) var(--s-md);
+  margin-top: var(--s-xs);
+}
+
 .opener__spine {
   position: absolute;
   z-index: 0;
@@ -362,11 +392,13 @@ h3 {
   }
 
   .opener__type,
-  .opener__art {
+  .opener__art,
+  .opener__aside {
     grid-column: 1 / -1;
   }
 
-  .opener__art {
+  .opener__art,
+  .opener__aside {
     margin-top: var(--s-2xl);
   }
 
@@ -1208,6 +1240,244 @@ html:not(.has-js) .theme {
   color: var(--muted);
 }
 
+/* ─── specification list ─── */
+.spec {
+  margin: 0;
+}
+
+.spec__row {
+  display: grid;
+  gap: var(--s-xs) var(--s-lg);
+  padding-block: var(--s-md);
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 760px) {
+  .spec__row {
+    grid-template-columns: 130px 1fr;
+  }
+}
+
+.spec__row dt {
+  font-size: var(--t-caption);
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.spec__row dd {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+/* ─── support matrix ─── */
+.matrix {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.matrix thead th {
+  padding-bottom: var(--s-sm);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--t-caption);
+  font-weight: 400;
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.matrix tbody tr {
+  border-bottom: 1px solid var(--line);
+}
+
+.matrix tbody th,
+.matrix td {
+  padding-block: var(--s-md);
+  padding-right: var(--s-lg);
+  vertical-align: baseline;
+  font-weight: 400;
+}
+
+.matrix tbody th {
+  width: 20%;
+  color: var(--ink);
+}
+
+.matrix__mark {
+  width: 2.2em;
+  padding-right: 0;
+  font-size: var(--t-body-large);
+  line-height: 1;
+  color: var(--accent);
+}
+
+.matrix tr[data-state='partial'] .matrix__mark {
+  color: var(--muted);
+}
+
+.matrix tr[data-state='none'] .matrix__mark {
+  color: var(--faint);
+}
+
+.matrix__note {
+  color: var(--ink-soft);
+  font-size: var(--t-micro);
+  line-height: var(--lh-relaxed);
+  text-wrap: pretty;
+}
+
+.matrix__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-md) var(--s-xl);
+  font-size: var(--t-caption);
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.matrix__legend [data-state='works'] {
+  color: var(--accent-text);
+}
+
+/* A table this wide stops being readable long before the phone breakpoint, so
+   each row becomes a small block with the mark held beside it. */
+@media (max-width: 860px) {
+  .matrix thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .matrix tbody tr {
+    display: grid;
+    grid-template-columns: 2.2em 1fr;
+    padding-block: var(--s-md);
+  }
+
+  .matrix tbody th,
+  .matrix td {
+    padding-block: 0;
+    padding-right: 0;
+  }
+
+  .matrix tbody th {
+    width: auto;
+  }
+
+  .matrix__mark {
+    grid-row: 1 / span 2;
+  }
+
+  .matrix__note {
+    margin-top: var(--s-sm);
+  }
+}
+
+.flag {
+  font-family: var(--font-sans);
+  font-size: var(--t-caption);
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--accent-text);
+  vertical-align: middle;
+}
+
+.flag[data-state='archive'] {
+  color: var(--faint);
+}
+
+/* ─── long documents: a legal page carries more than a paragraph of prose ─── */
+
+.prose-doc h3 {
+  margin-top: var(--s-xl);
+  font-family: var(--font-display);
+  font-size: var(--t-headline);
+  color: var(--ink);
+}
+
+.prose-doc ul,
+.prose-doc ol {
+  padding-left: 1.2em;
+  display: grid;
+  gap: var(--s-sm);
+}
+
+.prose-doc li {
+  text-wrap: pretty;
+}
+
+.prose-doc strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.prose-doc hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin-block: var(--s-2xl);
+}
+
+/* An identifier set only in a mono face disappears into the sentence around it,
+   so it carries a border: the reader can see at a glance what is a literal and
+   what is prose. */
+.prose-doc code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  padding: 0.12em 0.4em;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--paper-raised);
+  color: var(--ink);
+}
+
+.prose-doc pre {
+  overflow-x: auto;
+  padding: var(--s-lg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--paper-raised);
+  font-size: var(--t-caption);
+  line-height: var(--lh-normal);
+}
+
+.prose-doc pre code {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+/* A markdown table in a document is nearly always a lookup key, so it scrolls
+   inside itself rather than stretching the column it sits in. */
+.prose-doc table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: var(--t-micro);
+  text-align: left;
+}
+
+.prose-doc th,
+.prose-doc td {
+  padding: var(--s-sm) var(--s-md) var(--s-sm) 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: baseline;
+  font-weight: 400;
+}
+
+.prose-doc thead th {
+  font-size: var(--t-caption);
+  letter-spacing: var(--tr-label);
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
 @media print {
   @page {
     size: A4;
@@ -1268,7 +1538,7 @@ html:not(.has-js) .theme {
   }
 
   .cv__section {
-    margin-top: 6mm;
+    margin-top: 5mm;
   }
 
   .cv__h2 {
@@ -1277,7 +1547,15 @@ html:not(.has-js) .theme {
   }
 
   .cv__role {
-    margin-top: 4.5mm;
+    margin-top: 4mm;
+    break-inside: auto;
+  }
+
+  .cv__role-head,
+  .cv__role-scope,
+  .cv__role-context {
+    break-after: avoid;
+    break-inside: avoid;
   }
 
   .cv__role-title {
@@ -1300,8 +1578,29 @@ html:not(.has-js) .theme {
     gap: 1.2mm;
   }
 
+  .cv__skills {
+    display: grid;
+    gap: 1.8mm;
+    break-inside: avoid;
+  }
+
   .cv__skill {
-    padding-block: 1.6mm;
+    display: block;
+    padding-block: 0;
+    border-bottom: 0;
+  }
+
+  .cv__skill dt,
+  .cv__skill dd {
+    display: inline;
+  }
+
+  .cv__skill dt {
+    letter-spacing: 0.06em;
+  }
+
+  .cv__skill dt::after {
+    content: '\2002';
   }
 
   a {

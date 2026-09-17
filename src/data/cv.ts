@@ -69,13 +69,13 @@ export const experience: readonly Role[] = [
     summary:
       'An internal DevSecOps platform that collects security data wherever code and workloads live — scanners in GitLab CI, image scanning in Kubernetes clusters, cloud inventory — and drives everything downstream from it: CI quality gates, auto-fix merge requests, and the security team’s own back-office and analytics.',
     highlights: [
-      'Own the platform end to end: architecture, backend, data model, automated remediation, and both the security-team and developer-facing surfaces.',
+      'Own the platform end to end — architecture, backend, data model, automated remediation, and both the security-team and developer-facing surfaces. Architecture and implementation decisions are mine to make, within a direction agreed with engineering leadership.',
       'Built for scale: thousands of repositories across dozens of engineering teams and clusters, tens of thousands of container images and releases analysed, and a dependency inventory of hundreds of thousands of components.',
       'Built CVE prioritisation over a knowledge base of published vulnerabilities enriched with exploitation signals (CISA KEV, public exploits, EPSS), so triage starts from what is actually being exploited rather than from raw scanner volume.',
       'Built CVE-exposure analysis: when a new vulnerability is disclosed, affected projects surface automatically and reach the security team as tracked work, without waiting on input from product teams.',
       'Integrated multiple classes of scanning (SCA/SBOM, SAST, secrets, IaC) into CI, combining open-source tools with in-house extensions and custom scanners.',
       'Introduced LLMs as an automated second opinion on scanner findings — cutting false positives and a large share of the team’s manual triage load.',
-      'Lead the technical side: architecture and implementation decisions are mine to make, within a direction agreed with engineering leadership.',
+      'Exposed the platform over MCP — one interface onto the same inventory, findings and remediation, used by people and agents alike. On it, agents that assist the security team’s operators through triage, secure code review and penetration testing, with the judgement left to them.',
     ],
     tech: [
       'Python',
@@ -84,6 +84,7 @@ export const experience: readonly Role[] = [
       'Kubernetes',
       'Docker',
       'GitLab CI/CD',
+      'MCP',
       'Semgrep',
       'Trivy',
       'Syft',
@@ -99,13 +100,13 @@ export const experience: readonly Role[] = [
       summary:
         'コードとワークロードが存在する場所からセキュリティ情報を集める社内 DevSecOps 基盤です。GitLab CI 上のスキャナ、Kubernetes クラスタでのイメージスキャン、クラウドのインベントリを収集し、そこから下流のすべて（CI の品質ゲート、自動修正のマージリクエスト、セキュリティチームのバックオフィスと分析）を動かしています。',
       highlights: [
-        'アーキテクチャ、バックエンド、データモデル、自動修正、セキュリティチーム向けおよび開発者向けの画面まで、基盤全体を担当。',
+        'アーキテクチャ、バックエンド、データモデル、自動修正、セキュリティチーム向けおよび開発者向けの画面まで基盤全体を担当し、経営層と合意した方針の範囲内で技術面を主導。',
         '規模：数十の開発チームとクラスタにまたがる数千のリポジトリ。分析対象はコンテナイメージとリリースが数万規模、依存関係インベントリは数十万コンポーネント規模です。',
         '公開された脆弱性のナレッジベースに悪用の兆候（CISA KEV、公開エクスプロイト、EPSS）を重ねて優先度付けを構築。スキャナが出す量からではなく、実際に悪用されているものからトリアージを始められるようにしました。',
         '脆弱性の影響範囲分析を構築。新しい脆弱性が公表されると、影響を受けるプロジェクトが自動的に浮かび上がり、追跡可能な作業としてセキュリティチームに届きます。開発チームからの入力を待つ必要はありません。',
         'SCA/SBOM、SAST、シークレット、IaC と複数種類のスキャンを CI に統合。オープンソースのツールに自社の拡張と独自スキャナを組み合わせています。',
         'スキャナの検知結果に対する自動の第二意見として LLM を導入し、誤検知とチームの手作業によるトリアージ負荷を大きく削減。',
-        '技術面を主導。アーキテクチャと実装の判断は、経営層と合意した方針の範囲内で自身が担っています。',
+        '基盤を MCP で公開。インベントリ・検知結果・修正の操作という同じ入り口に、人もエージェントも同じように到達できます。その上で、トリアージ、セキュアコードレビュー、ペネトレーションテストといった作業でセキュリティチームの担当者を支援するエージェントを整備中です。判断そのものは担当者に残します。',
       ],
     },
   },
@@ -285,11 +286,11 @@ export const earlier = {
 } as const;
 
 export const skills = [
-  { label: 'Languages', value: 'Python (primary), SQL', ja: { label: '言語', value: 'Python（主）、SQL' } },
+  { label: 'Languages', value: 'Python (primary), SQL, Bash', ja: { label: '言語', value: 'Python（主）、SQL、Bash' } },
   {
     label: 'Backend',
-    value: 'FastAPI, Litestar, gRPC, asyncpg, Django, Flask',
-    ja: { label: 'バックエンド', value: 'FastAPI, Litestar, gRPC, asyncpg, Django, Flask' },
+    value: 'FastAPI, Litestar, gRPC, asyncpg, Celery, Django, Flask',
+    ja: { label: 'バックエンド', value: 'FastAPI, Litestar, gRPC, asyncpg, Celery, Django, Flask' },
   },
   {
     label: 'Data',
@@ -369,6 +370,28 @@ export const projects = [
     },
   },
 ] as const;
+
+/**
+ * Not an app, so not in `projects`: no store listing, and the two-apps copy on
+ * /about would stop being true if it joined that list.
+ */
+export const research = {
+  name: 'MindOne — device support for a MediaTek phone',
+  href: '/mindone',
+  repos: [
+    'https://github.com/iasnezhkov/android_kernel_ikko_mindone',
+    'https://github.com/iasnezhkov/android_device_ikko_mindone',
+  ],
+  reposLabel: 'github.com/iasnezhkov — kernel · device tree',
+  summary:
+    'A retail Android phone on a MediaTek Helio G99, sold on Linux 5.10 with no published source for its kernel, device tree or hardware abstraction layers. Hand-ported it to Linux 6.12 by way of 6.1, rebuilding the device tree out of the stock compiled blob and carrying 339 out-of-tree driver trees, 290 of them loading on the running phone. Above the kernel, rewrote closed userspace in the open — an audio HAL, a sensors HAL and four HIDL→AIDL bridges — so the device can be tuned and carried onto later Android releases. Two repositories: the 6.12 kernel current, the 6.1 port archived. It is the phone I carry.',
+  tech: ['Linux 6.12', 'C', 'AArch64', 'Android GKI/KMI', 'Device Tree', 'Ghidra', 'AOSP', 'LineageOS'],
+  ja: {
+    name: 'MindOne — MediaTek 端末のデバイスサポート',
+    summary:
+      'MediaTek Helio G99 を積んだ市販の Android 端末です。出荷時は Linux 5.10 で、カーネルもデバイスツリーも HAL もソースは公開されていませんでした。6.1 を経て Linux 6.12 まで手作業で移植し、デバイスツリーは出荷時のバイナリから復元。カーネル外のドライバは 339 ツリーあり、うち 290 モジュールが実機で読み込まれます。カーネルより上のクローズドな実装もオープンに書き直しています — 音声 HAL、センサー HAL、HIDL→AIDL ブリッジ 4 本。最適化の余地を残し、将来の Android にも載せるためです。公開は 2 リポジトリで、6.12 が現行、6.1 の移植はアーカイブ。普段使いの端末です。',
+  },
+} as const;
 
 export const education = {
   institution: 'Southern Federal University (SFEDU)',

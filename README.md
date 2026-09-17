@@ -4,9 +4,10 @@
 
 The site of a one-person studio, at [nonbiri.dev](https://nonbiri.dev).
 
-Twelve routes, each in English at the root and in Japanese under `/ja`. Astro
-and TypeScript at its strictest, zero bundled JavaScript, hand-written CSS
-driven by generated design tokens, and no webfonts.
+Twelve routes, each in English at the root and in Japanese under `/ja`, plus an
+English-only section on a hardware project. Astro and TypeScript at its
+strictest, zero bundled JavaScript, hand-written CSS driven by generated design
+tokens, and no webfonts.
 
 **Suji** — dictionary, kanji, grammar, reading, exam practice and spaced
 repetition in one offline-first iPad app, all running on a single progress
@@ -15,6 +16,12 @@ record. A six-section teacher side sits on the same data.
 **Gokaku** — a free offline trainer for Japan's written driving exams, on the
 App Store. Each of its 932 true/false questions carries a verbatim quote from
 the National Police Agency rulebook the exam is written from.
+
+**MindOne** — not an app: device support for a MediaTek phone whose vendor
+published no source. A device tree reconstructed from a compiled blob and two
+kernels — Linux 6.12, which the phone runs, and the 6.1 port behind it, kept as
+an archive. `/mindone` is one page: what was built, what it runs on, and the two
+repositories it is published in.
 
 ```bash
 npm install
@@ -25,8 +32,8 @@ npm run build
 
 ## What it ships
 
-**No bundled JavaScript.** Two hand-written files, both `<head>`-blocking so
-they run before first paint: `public/theme.js` sets the colour theme and
+**No bundled JavaScript.** Two hand-written files, both `<head>`-blocking so they
+run before first paint: `public/theme.js` sets the colour theme and
 `public/lang.js` decides the language. No framework runtime, no bundle. CI fails
 the build if anything lands in `dist/_astro/*.js`.
 
@@ -54,6 +61,50 @@ carries `onum`, and the sans that sets every paragraph does not.
 the browser silently drops them, so such a page breaks *only in production*.
 `astro check` cannot see it; `npm run shoot` can.
 
+## The CV is public, so the numbers in it are rounded on purpose
+
+`/cv` and `public/cv.pdf` are served to anyone who asks. Employment history is
+fine there; an employer's internal scale is not. So `src/data/cv.ts` describes
+the current platform's size in orders of magnitude — "thousands of repositories",
+"tens of thousands of container images", "hundreds of thousands of components" —
+and never in exact figures, counts of internal teams or clusters, or coverage
+percentages. That vagueness is a decision, not an omission waiting to be filled
+in: a private CV sent to one recruiter can carry the real numbers, and this file
+cannot, because publishing them discloses the shape of somebody else's estate.
+
+Sharper numbers are welcome where the source is already public — the MindOne
+figures in `src/data/mindone.ts` all come off two published repositories, and the
+app figures off the shipped products. The test is not "is this impressive", it is
+"could a reader get this from something already published".
+
+## Printing the CV, and the four rules that keep it to three pages
+
+`npm run cv:pdf` reprints `/cv` through Chrome and fails past three pages, so the
+print rules below are load-bearing. Change one and the page count moves.
+
+**A role may break across a page; its opening lines may not.** `.cv__role` is
+`break-inside: auto` in print because the first entry is taller than the space
+left on page one, and held together it pushed itself to a page of its own — a
+whole page lost to whitespace. `.cv__role-head`, `.cv__role-scope` and
+`.cv__role-context` stay `break-inside: avoid` so a heading never strands at the
+foot of a page and a company description never splits mid-sentence.
+
+**The skills block is a table on screen and a list on paper.** At print width a
+third of the measure would go to a column of one-word labels, and the block ran
+to a fifth of the document; inline, with the label leading the line, it is half
+the height. It is short enough to carry `break-inside: avoid`, which is what
+stops its second half appearing on the next page with no heading over it.
+
+**Skills sit above experience.** They are the first thing a recruiter scans for,
+and at the top of page one the block cannot be orphaned by a page break.
+
+**Name and page number are drawn in the page margin**, from `footerTemplate` in
+`scripts/build-cv-pdf.ts` rather than from the document, so a separated page two
+still identifies itself and nothing in the flow moves to make room. The links on
+the page are real `<a>` elements, so the PDF keeps them clickable, and the
+download links carry a `download` attribute so the file saves under a name a
+recruiter can file.
+
 ## Both languages, and how they are kept in step
 
 Two mechanisms, chosen by the shape of what is being translated.
@@ -76,6 +127,42 @@ paragraph and JSX text all join wrapped lines with a space — the word break in
 English, a hole in the middle of a word in Japanese. Frontmatter is repaired in
 the schema (`src/lib/cjk.ts`, applied by `content.config.ts`); markdown bodies and
 `.astro` templates have no hook to do that in, so they are written unwrapped.
+
+## The MindOne section, and why it is English-only for now
+
+It is a third *kind* of thing, not a third app, so it does not go in the `apps`
+collection: no store listing, no platforms, no release status, and a schema built
+around those would be mostly empty fields. It is one page, and `src/data/mindone.ts`
+is all of it — the device, the three things that were built, the support matrix,
+the numbers and the honest limits, as one typed record the page renders.
+
+**The numbers come from the published repositories, not from the working notes
+behind them.** The kernel and the device tree are public, and each carries a
+README that was checked against a clean clone before it went out; that is the
+vetted artefact, so it is what this page is written from. The first version of
+these pages was assembled by reading the device project's working notes instead
+— hundreds of files, several dates of truth, retracted findings ranked alongside
+live ones — and it published a support matrix that was wrong about four
+subsystems. Change a claim here only against something the repositories state.
+
+**The masthead and footer links to it are wrapped in `lang === 'en'`.** Every
+other route exists in both languages, and the switch is never a dead control;
+this section does not exist in Japanese yet, so a Japanese page linking to it
+would throw the reader into English with nothing to carry them back. The layout
+already handles the reverse case on its own — with no `alternate` passed, 日本語
+renders disabled with a title saying why. Delete the two `lang === 'en'` guards
+the day the Japanese pages land, not before.
+
+**The support matrix is data, not prose.** Rows carry a state (`works` /
+`partial` / `none`) and a note; the mark, its colour and the accessible label all
+derive from the state. That is the same split the app pages use — numbers and
+status are language-neutral and written once, only prose is duplicated — so a
+Japanese version costs a translation of the notes and nothing else.
+
+**`Liability.astro` goes at the foot of the page.** It links repositories that
+unlock bootloaders and flash partitions, which can destroy someone's phone, so
+the no-warranty notice is a component rather than copy that can drift or be
+forgotten.
 
 ## Design tokens are the source of truth
 
@@ -128,6 +215,12 @@ the build rather than reaching the App Store review queue.
 | `npm run cv:pdf` | reprint `/cv` to `public/cv.pdf`, and fail past three pages |
 | `npm run og` | redraw the four social cards |
 
+**TypeScript stays pinned at 6.** It is the one dependency that is not on its
+latest major: `astro check` runs through `@astrojs/language-server`, which needs
+TypeScript's programmatic API, and the native compiler shipped in 7.0 does not
+expose it yet. Upgrading makes the third gate in `npm run check` fail outright
+rather than silently — but it fails, so the pin is exact, not a caret.
+
 `scripts/check-classes.ts` fails if a page uses a class the stylesheet does not
 define. It exists because a stylesheet rewrite once left one page on the old
 class names: it rendered completely unstyled, and the build, the typecheck and
@@ -135,9 +228,18 @@ the geometry sweep all reported success. A missing class is neither a type error
 nor a layout error — it is only visible by looking, which is the step that gets
 skipped.
 
+`astro.config.mjs` sets `syntaxHighlight: 'prism'` although nothing in the content
+carries a code block today. Shiki, the default, colours every token with a `style`
+attribute, and `style-src 'self'` makes the browser drop them: highlighting would
+look right locally and be gone in production. Prism emits class names instead, so
+the setting stays as a guard against a trap that is invisible until deploy.
+
 `scripts/shoot.ts` measures rather than looks. Keep its `PROBE` list in step with
 the stylesheet: pointed at deleted class names it matches nothing and reports
-"clean" forever.
+"clean" forever. Its routes are read out of `dist/` rather than listed by hand —
+a hand-kept list does not fail when a page is missing from it, it just reports
+clean and never looks at the new page, which is how a page added late to this
+branch shipped unswept.
 
 `scripts/theme-check.ts` pins the browser clock rather than reading the machine's
 — the automatic theme depends on the hour, and a check whose result depends on
@@ -217,12 +319,13 @@ src/
   content/apps/*.md      product copy and screenshots, with a `ja:` block
   content/legal/*.md     privacy, terms, support — `ja/` holds the translations
   data/cv.ts             one typed record → /cv, /about, /ja/*, cv.pdf
+  data/mindone.ts        one typed record → /mindone, English only for now
   lib/apps.ts            narrows an app entry to one with a Japanese block
   lib/cjk.ts             undo line folding inside Japanese sentences
   styles/tokens.css      GENERATED — do not edit
   styles/fresh.css       the whole component layer
   layouts/Fresh.astro    masthead, theme + language switches, veil, footer
-  pages/                 index · [app] · [app]/[doc] · about · cv
+  pages/                 index · [app] · [app]/[doc] · about · cv · mindone
 public/llms.txt          what the site is, for agents that read it
 public/theme.js          colour theme, resolved from the clock
 public/lang.js           language, resolved from the browser

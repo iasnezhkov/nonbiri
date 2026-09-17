@@ -1,6 +1,6 @@
 ---
 import Fresh from '../../layouts/Fresh.astro';
-import { profile, experience, isTranslated, earlier, skills, projects, education, languages } from '../../data/cv.ts';
+import { profile, experience, isTranslated, earlier, skills, projects, research, education, languages } from '../../data/cv.ts';
 
 const featured = experience.filter(isTranslated).filter((role) => role.featured);
 const rest = experience.filter((role) => !role.featured);
@@ -43,7 +43,7 @@ const schema = {
         <p class="read mt-xl">Python 歴 7 年。スタートアップ、大規模トラフィックのコンシューマ向け製品、銀行、そして現在は通信グループで開発しています。</p>
         <ul class="tags mt-xl">
           <li><a class="link" href="/ja/cv">職務経歴書</a></li>
-          <li><a class="link" href="/cv.pdf">PDF（英語）</a></li>
+          <li><a class="link" href="/cv.pdf" download="Ilia-Snezhkov-CV.pdf">PDF（英語）</a></li>
           <li><a class="link" href={profile.links.github}>GitHub</a></li>
           <li><a class="link" href={profile.links.linkedin}>LinkedIn</a></li>
           <li><a class="link" href={`mailto:${profile.email}`}>メール</a></li>
@@ -127,6 +127,25 @@ const schema = {
 
     <section class="spread grid">
       <div class="col-c">
+        <p class="micro">アプリのほかに</p>
+        <h2 class="mag-3 mt-lg">{research.ja.name}</h2>
+        <p class="micro mt-sm">{research.tech.join(' · ')}</p>
+        <ul class="tags mt-lg">
+          {research.repos.map((repo) => (
+            <li><a class="link" href={repo}>{repo.split('/').at(-1)}</a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="col-d">
+        <p class="note">{research.ja.summary}</p>
+        <p class="note mt-lg">
+          大学の専攻はシステムセキュリティで、CTF ではエクスプロイトとリバースエンジニアリングをやっていました。その延長にある仕事です。
+        </p>
+      </div>
+    </section>
+
+    <section class="spread grid">
+      <div class="col-c">
         <p class="micro">学歴</p>
         <p class="read mt-lg">
           {`${education.ja.institution}（${education.ja.location}） — ${education.ja.field}、${education.ja.degree}、${education.from.slice(-4)}〜${education.to.slice(-4)} 年。`}
@@ -146,7 +165,7 @@ const schema = {
       <p class="mag-3 mt-lg"><a class="link" href={`mailto:${profile.email}`}>{profile.email}</a></p>
       <ul class="tags mt-xl">
         <li><a class="link" href="/ja/cv">職務経歴書</a></li>
-        <li><a class="link" href="/cv.pdf">PDF をダウンロード（英語）</a></li>
+        <li><a class="link" href="/cv.pdf" download="Ilia-Snezhkov-CV.pdf">PDF をダウンロード（英語）</a></li>
         <li><a class="link" href={profile.links.github}>GitHub</a></li>
         <li><a class="link" href={profile.links.linkedin}>LinkedIn</a></li>
       </ul>

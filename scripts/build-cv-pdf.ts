@@ -54,10 +54,21 @@ try {
   await page.emulateMedia({ media: 'print', colorScheme: 'light' });
   await page.goto(`http://127.0.0.1:${PORT}/cv/`, { waitUntil: 'networkidle' });
 
+  const footer = `
+    <div style="width:100%;margin:0 15mm;padding-top:3mm;font-family:Helvetica,Arial,sans-serif;
+                font-size:6.6pt;letter-spacing:0.08em;text-transform:uppercase;color:#777;
+                display:flex;justify-content:space-between;">
+      <span>Ilia Snezhkov — Senior Software Engineer</span>
+      <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
+    </div>`;
+
   const pdf = await page.pdf({
     format: 'A4',
     printBackground: false,
     preferCSSPageSize: true,
+    displayHeaderFooter: true,
+    headerTemplate: '<span></span>',
+    footerTemplate: footer,
   });
 
   await writeFile(OUT, pdf);

@@ -47,6 +47,21 @@ No server, no account, no analytics, no ads. The App Privacy label reads Data No
 Collected. It is independent and unofficial, with no connection to the 警察庁, the
 国土交通省, any prefectural licence centre or any driving school.
 
+## MindOne — /mindone
+
+Device support for the iKKO MindOne, a card-sized Android phone on a MediaTek Helio G99
+(MT6789 / MT8781) sold with no published source for its kernel, its device tree or its
+hardware abstraction layers. Hand-ported to Linux 6.12 by way of 6.1, with the device
+tree reconstructed from the stock compiled blob, and 339 out-of-tree driver trees of
+which 290 modules load on the running phone. Above the kernel the closed userspace is
+being rewritten in the open — an audio HAL, a sensors HAL and four HIDL to AIDL bridges
+so far — so the device can be measured and tuned, and carried onto Android releases the
+vendor binaries were never built for. Published as two repositories: the 6.12 kernel is
+current, the 6.1 port is kept as an archive.
+
+Independent, unofficial and uncertified: no VTS or CTS run, no compatibility evidence
+claimed, and no connection to iKKO or MediaTek. English only for now.
+
 ## Ilia Snezhkov — /about, /cv
 
 Senior software engineer, backend and platform, specialising in application security.
@@ -64,6 +79,7 @@ driven by exploitation signals, and automated remediation. Contact: iasnezhkov@n
 - [About](https://nonbiri.dev/about): short professional read
 - [CV](https://nonbiri.dev/cv): full record, also at /cv.pdf
 - [Japanese edition](https://nonbiri.dev/ja): every page above, translated
+- [MindOne](https://nonbiri.dev/mindone): the kernel and device tree, what runs on them and what does not — English only
 
 ## Optional
 

@@ -1,6 +1,6 @@
 ---
 import Fresh from '../layouts/Fresh.astro';
-import { profile, experience, skills, projects, education, languages } from '../data/cv.ts';
+import { profile, experience, skills, projects, research, education, languages } from '../data/cv.ts';
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -43,8 +43,17 @@ const jsonLd = {
         </ul>
 
         <p class="cv__summary">{profile.summary}</p>
-        <p class="mt-lg no-print"><a class="link link--lone" href="/cv.pdf">Download as PDF</a></p>
+        <p class="mt-lg no-print"><a class="link link--lone" href="/cv.pdf" download="Ilia-Snezhkov-CV.pdf">Download as PDF</a></p>
       </header>
+
+      <section class="cv__section">
+        <h2 class="cv__h2">Technical skills</h2>
+        <dl class="cv__skills">
+          {skills.map((skill) => (
+            <div class="cv__skill"><dt>{skill.label}</dt><dd>{skill.value}</dd></div>
+          ))}
+        </dl>
+      </section>
 
       <section class="cv__section">
         <h2 class="cv__h2">Experience</h2>
@@ -66,15 +75,6 @@ const jsonLd = {
       </section>
 
       <section class="cv__section">
-        <h2 class="cv__h2">Technical skills</h2>
-        <dl class="cv__skills">
-          {skills.map((skill) => (
-            <div class="cv__skill"><dt>{skill.label}</dt><dd>{skill.value}</dd></div>
-          ))}
-        </dl>
-      </section>
-
-      <section class="cv__section">
         <h2 class="cv__h2">Personal projects</h2>
         {projects.map((project) => (
           <section class="cv__role">
@@ -83,6 +83,16 @@ const jsonLd = {
             <p class="cv__tech">{project.tech.join(' · ')}</p>
           </section>
         ))}
+      </section>
+
+      <section class="cv__section">
+        <h2 class="cv__h2">Independent research</h2>
+        <section class="cv__role">
+          <h3 class="cv__role-title">{research.name}</h3>
+          <p class="cv__role-meta"><a href={profile.links.github}>{research.reposLabel}</a></p>
+          <p class="cv__role-summary">{research.summary}</p>
+          <p class="cv__tech">{research.tech.join(' · ')}</p>
+        </section>
       </section>
 
       <section class="cv__section">

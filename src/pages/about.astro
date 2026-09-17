@@ -1,6 +1,6 @@
 ---
 import Fresh from '../layouts/Fresh.astro';
-import { profile, experience, earlier, skills, projects, education, languages } from '../data/cv.ts';
+import { profile, experience, earlier, skills, projects, research, education, languages } from '../data/cv.ts';
 
 const featured = experience.filter((role) => role.featured);
 const rest = experience.filter((role) => !role.featured);
@@ -43,7 +43,7 @@ const schema = {
         </p>
         <ul class="tags mt-xl">
           <li><a class="link" href="/cv">Curriculum vitae</a></li>
-          <li><a class="link" href="/cv.pdf">PDF</a></li>
+          <li><a class="link" href="/cv.pdf" download="Ilia-Snezhkov-CV.pdf">PDF</a></li>
           <li><a class="link" href={profile.links.github}>GitHub</a></li>
           <li><a class="link" href={profile.links.linkedin}>LinkedIn</a></li>
           <li><a class="link" href={`mailto:${profile.email}`}>Email</a></li>
@@ -137,6 +137,23 @@ const schema = {
 
     <section class="spread grid">
       <div class="col-c">
+        <p class="micro">Away from the apps</p>
+        <h2 class="mag-3 mt-lg">
+          <a class="link" href={research.href}>{research.name}</a>
+        </h2>
+        <p class="micro mt-sm">{research.tech.join(' · ')}</p>
+      </div>
+      <div class="col-d">
+        <p class="note">{research.summary}</p>
+        <p class="note mt-lg">
+          The degree was in systems security and the CTF years went on exploitation and
+          reversing. This is that work, picked back up.
+        </p>
+      </div>
+    </section>
+
+    <section class="spread grid">
+      <div class="col-c">
         <p class="micro">Education</p>
         <p class="read mt-lg">
           {education.institution}, {education.location} — {education.degree},
@@ -157,7 +174,7 @@ const schema = {
       <p class="mag-3 mt-lg"><a class="link" href={`mailto:${profile.email}`}>{profile.email}</a></p>
       <ul class="tags mt-xl">
         <li><a class="link" href="/cv">Curriculum vitae</a></li>
-        <li><a class="link" href="/cv.pdf">Download CV as PDF</a></li>
+        <li><a class="link" href="/cv.pdf" download="Ilia-Snezhkov-CV.pdf">Download CV as PDF</a></li>
         <li><a class="link" href={profile.links.github}>GitHub</a></li>
         <li><a class="link" href={profile.links.linkedin}>LinkedIn</a></li>
       </ul>

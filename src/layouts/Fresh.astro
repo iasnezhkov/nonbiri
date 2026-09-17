@@ -182,6 +182,9 @@ const LANGS = [
               {lang === 'ja' ? (app.data.ja?.name ?? app.data.name) : app.data.name}
             </a>
           ))}
+          {lang === 'en' && (
+            <a href="/mindone" aria-current={path.startsWith('/mindone') ? 'page' : undefined}>MindOne</a>
+          )}
           <a href={`${root}/about`} aria-current={path === `${root}/about` ? 'page' : undefined}>{T.about}</a>
           <a href={`${root}/cv`} aria-current={path === `${root}/cv` ? 'page' : undefined}>{T.cv}</a>
         </nav>
@@ -204,6 +207,16 @@ const LANGS = [
             </ul>
           </div>
         ))}
+        {lang === 'en' && (
+          <div>
+            <h2>MindOne</h2>
+            <ul>
+              <li><a href="/mindone">{T.overview}</a></li>
+              <li><a href="https://github.com/iasnezhkov/android_kernel_ikko_mindone">Kernel</a></li>
+              <li><a href="https://github.com/iasnezhkov/android_device_ikko_mindone">Device tree</a></li>
+            </ul>
+          </div>
+        )}
         <div>
           <h2>{T.who}</h2>
           <ul>

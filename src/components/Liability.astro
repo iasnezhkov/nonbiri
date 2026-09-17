@@ -1,0 +1,19 @@
+---
+interface Props { tight?: boolean | undefined }
+const { tight = false } = Astro.props;
+---
+
+<section class:list={[tight ? 'spread--tight' : 'spread', 'no-print']}>
+  <p class="micro">Disclaimer</p>
+  <p class="note mt-lg">
+    Everything on these pages is provided as is, with no warranty of any kind, express or
+    implied. Unlocking a bootloader, flashing partitions and running the tools linked here can
+    erase all your data and permanently disable your phone. <strong>You do this at your own risk
+    and on your own responsibility.</strong> The author accepts no liability for any loss or
+    damage, to your device or otherwise, arising from following anything written here.
+  </p>
+  <p class="note mt-md">
+    A personal research project on a device bought at retail, describing what happened on one
+    unit. Not affiliated with, endorsed by, or supported by iKKO or MediaTek.
+  </p>
+</section>

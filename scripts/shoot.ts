@@ -1,4 +1,5 @@
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readdir } from 'node:fs/promises';
+import { join } from 'node:path';
 import { chromium } from 'playwright';
 import { serveDist } from './serve.ts';
 
@@ -7,32 +8,25 @@ const server = await serveDist(4331);
 const BASE = process.env.BASE ?? 'http://127.0.0.1:4331';
 const OUT = '.shots';
 
-const ROUTES = [
-  '/',
-  '/suji',
-  '/gokaku',
-  '/about',
-  '/cv',
-  '/gokaku/privacy',
-  '/gokaku/terms',
-  '/gokaku/support',
-  '/suji/privacy',
-  '/suji/terms',
-  '/suji/support',
-  '/404',
-  '/ja',
-  '/ja/suji',
-  '/ja/gokaku',
-  '/ja/about',
-  '/ja/cv',
-  '/ja/gokaku/privacy',
-  '/ja/gokaku/terms',
-  '/ja/gokaku/support',
-  '/ja/suji/privacy',
-  '/ja/suji/terms',
-  '/ja/suji/support',
-  '/ja/404',
-];
+/**
+ * Read from the build rather than kept by hand. A list maintained by hand does
+ * not fail when a page is missing from it — the sweep just reports clean and
+ * the new page is never looked at, which is how the first MindOne log entry
+ * shipped unswept.
+ */
+async function routes(): Promise<string[]> {
+  const found: string[] = [];
+  const walk = async (dir: string, prefix: string) => {
+    for (const entry of await readdir(dir, { withFileTypes: true })) {
+      if (entry.isDirectory()) await walk(join(dir, entry.name), `${prefix}/${entry.name}`);
+      else if (entry.name === 'index.html') found.push(prefix === '' ? '/' : prefix);
+    }
+  };
+  await walk('dist', '');
+  return found.sort();
+}
+
+const ROUTES = await routes();
 const WIDTHS = [2560, 1920, 1440, 1100, 820, 390, 320];
 
 const PROBE = [
@@ -48,6 +42,13 @@ const PROBE = [
   '.statement__t',
   '.cv__role-title',
   '.cv__role-meta',
+  '.matrix__note',
+  '.matrix__legend',
+  '.spec__row dd',
+  '.ship__name',
+  '.ship__meta',
+  '.cv__skill dd',
+  '.prose-doc table',
 ].join(',');
 
 const COVERAGE = `(() => {

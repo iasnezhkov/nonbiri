@@ -4,10 +4,9 @@
 
 The site of a one-person studio, at [nonbiri.dev](https://nonbiri.dev).
 
-Twelve routes, each in English at the root and in Japanese under `/ja`, plus an
-English-only section on a hardware project. Astro and TypeScript at its
-strictest, zero bundled JavaScript, hand-written CSS driven by generated design
-tokens, and no webfonts.
+Every route in English at the root and in Japanese under `/ja`. Astro and
+TypeScript at its strictest, zero bundled JavaScript, hand-written CSS driven by
+generated design tokens, and no webfonts.
 
 **Suji** — dictionary, kanji, grammar, reading, exam practice and spaced
 repetition in one offline-first iPad app, all running on a single progress
@@ -17,11 +16,9 @@ record. A six-section teacher side sits on the same data.
 App Store. Each of its 932 true/false questions carries a verbatim quote from
 the National Police Agency rulebook the exam is written from.
 
-**MindOne** — not an app: device support for a MediaTek phone whose vendor
-published no source. A device tree reconstructed from a compiled blob and two
-kernels — Linux 6.12, which the phone runs, and the 6.1 port behind it, kept as
-an archive. `/mindone` is one page: what was built, what it runs on, and the two
-repositories it is published in.
+**MindOne** — not an app: unofficial Android 17 for the card-sized iKKO MindOne,
+whose vendor published no source. `/mindone` is one page, written for people who
+own the phone, with the two source repositories under "For developers".
 
 ```bash
 npm install
@@ -73,9 +70,10 @@ in: a private CV sent to one recruiter can carry the real numbers, and this file
 cannot, because publishing them discloses the shape of somebody else's estate.
 
 Sharper numbers are welcome where the source is already public — the MindOne
-figures in `src/data/mindone.ts` all come off two published repositories, and the
-app figures off the shipped products. The test is not "is this impressive", it is
-"could a reader get this from something already published".
+facts in `src/data/mindone.ts` come off the two published repositories and the
+installed build on the phone, and the app figures off the shipped products. The
+test is not "is this impressive", it is "could a reader get this from something
+already published".
 
 ## Printing the CV, and the four rules that keep it to three pages
 
@@ -131,33 +129,32 @@ the schema (`src/lib/cjk.ts`, applied by `content.config.ts`); markdown bodies a
 ## The MindOne section
 
 It is a third *kind* of thing, not a third app, so it does not go in the `apps`
-collection: no store listing, no platforms, no release status, and a schema built
-around those would be mostly empty fields. It is one page, and `src/data/mindone.ts`
-is all of it — the device, the three things that were built, the support matrix,
-the numbers and the honest limits, as one typed record the page renders.
+collection: no store listing, no platforms, no release status. `src/data/mindone.ts`
+is the whole page as one typed record, and both templates render it.
 
-**The numbers come from the published repositories, not from the working notes
-behind them.** The kernel and the device tree are public, and each carries a
-README that was checked against a clean clone before it went out; that is the
-vetted artefact, so it is what this page is written from. The first version of
-these pages was assembled by reading the device project's working notes instead
-— hundreds of files, several dates of truth, retracted findings ranked alongside
-live ones — and it published a support matrix that was wrong about four
-subsystems. Change a claim here only against something the repositories state.
+**It is written for someone who owns the phone, not for someone who builds it.**
+The reader should come away knowing three things: the phone runs current Android,
+everything works except the built-in virtual SIM, and the work behind it was large —
+the whole stack under Android, from an Android 12-generation vendor base up to
+today's, done from the outside. Say that in plain words and leave the proof to the
+repositories. Driver counts, line counts, interface names and test status do not go
+in the page copy; a short technical caption under each item and the "For developers"
+block are where an engineer finds the names to search for. The page does not list
+what is missing or broken: open problems belong to the device project, not here.
 
-**It exists in both languages**, like every other route, so the language switch
-is never a dead control. `/ja/mindone` is a second template over the same record:
-the numbers, the states and the ordering are written once and only prose carries
-a `ja` half, which is the split the app pages use. Japanese written into an
-`.astro` template has no `foldCjk` hook to undo line folding, so those strings
-stay on one line however long they run — a wrapped Japanese sentence renders with
-a space in the middle of it.
+**Facts come from the published repositories and the phone, not from working notes.**
+The first version of this page was assembled from the device project's working notes
+— hundreds of files, several dates of truth, retracted findings beside live ones —
+and it published a support matrix that was wrong about four subsystems. The Android
+and LineageOS versions are read off the installed build; anything about the code is
+checked against the README of the repository it lives in.
 
-**The support matrix is data, not prose.** Rows carry a state (`works` /
-`partial` / `none`) and a note; the mark, its colour and the accessible label all
-derive from the state. That is the same split the app pages use — numbers and
-status are language-neutral and written once, only prose is duplicated — so a
-Japanese version costs a translation of the notes and nothing else.
+**It exists in both languages**, like every other route, so the language switch is
+never a dead control. `/ja/mindone` is a second template over the same record: only
+prose carries a `ja` half, and versions, links and ordering are written once.
+Japanese written into an `.astro` template or a `.ts` string has no `foldCjk` hook
+to undo line folding, so those strings stay on one line however long they run — a
+wrapped Japanese sentence renders with a space in the middle of it.
 
 **`Liability.astro` goes at the foot of the page.** It links repositories that
 unlock bootloaders and flash partitions, which can destroy someone's phone, so
@@ -319,7 +316,7 @@ src/
   content/apps/*.md      product copy and screenshots, with a `ja:` block
   content/legal/*.md     privacy, terms, support — `ja/` holds the translations
   data/cv.ts             one typed record → /cv, /about, /ja/*, cv.pdf
-  data/mindone.ts        one typed record → /mindone, English only for now
+  data/mindone.ts        one typed record → /mindone and /ja/mindone
   lib/apps.ts            narrows an app entry to one with a Japanese block
   lib/cjk.ts             undo line folding inside Japanese sentences
   styles/tokens.css      GENERATED — do not edit

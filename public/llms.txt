@@ -49,18 +49,19 @@ Collected. It is independent and unofficial, with no connection to the 警察庁
 
 ## MindOne — /mindone
 
-Device support for the iKKO MindOne, a card-sized Android phone on a MediaTek Helio G99
-(MT6789 / MT8781) sold with no published source for its kernel, its device tree or its
-hardware abstraction layers. Hand-ported to Linux 6.12 by way of 6.1, with the device
-tree reconstructed from the stock compiled blob, and 339 out-of-tree driver trees of
-which 290 modules load on the running phone. Above the kernel the closed userspace is
-being rewritten in the open — an audio HAL, a sensors HAL and four HIDL to AIDL bridges
-so far — so the device can be measured and tuned, and carried onto Android releases the
-vendor binaries were never built for. Published as two repositories: the 6.12 kernel is
-current, the 6.1 port is kept as an archive.
+Unofficial Android 17 for the iKKO MindOne, a card-sized phone on a MediaTek Helio G99
+that shipped with Android 15 on an Android 12-generation vendor platform, with no
+published source for its kernel, device tree or hardware layers. The whole stack was
+brought up to date from the hardware up, by one developer and from the outside: Google's
+android16-6.12 kernel core with the board's drivers ported to it, a device tree rebuilt
+from the stock binary, and open replacements for the closed audio, sensor, location,
+camera and video services. It runs LineageOS 24, and everything the phone can do works
+except the built-in virtual SIM.
 
-Independent, unofficial and uncertified: no VTS or CTS run, no compatibility evidence
-claimed, and no connection to iKKO or MediaTek.
+It is the developer's own phone. A public download, without Google apps and with a guide
+to adding them, is in preparation; the source code is already on GitHub as two
+repositories, the device tree and the kernel. Independent and unofficial, with no
+connection to iKKO, MediaTek or the LineageOS project.
 
 ## Ilia Snezhkov — /about, /cv
 

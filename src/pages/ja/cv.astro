@@ -1,6 +1,6 @@
 ---
 import Fresh from '../../layouts/Fresh.astro';
-import { profile, experience, isTranslated, skills, projects, research, education, languages, jaMonth } from '../../data/cv.ts';
+import { profile, experience, isTranslated, skills, cvProjects, research, education, languages, jaMonth } from '../../data/cv.ts';
 
 const roles = experience.filter(isTranslated);
 
@@ -76,17 +76,6 @@ const jsonLd = {
       </section>
 
       <section class="cv__section">
-        <h2 class="cv__h2">個人開発</h2>
-        {projects.map((project) => (
-          <section class="cv__role">
-            <h3 class="cv__role-title">{project.ja.name}</h3>
-            <p class="cv__role-summary">{project.ja.summary}</p>
-            <p class="cv__tech">{project.tech.join(' · ')}</p>
-          </section>
-        ))}
-      </section>
-
-      <section class="cv__section">
         <h2 class="cv__h2">個人研究</h2>
         <section class="cv__role">
           <h3 class="cv__role-title">{research.ja.name}</h3>
@@ -94,6 +83,17 @@ const jsonLd = {
           <p class="cv__role-summary">{research.ja.summary}</p>
           <p class="cv__tech">{research.tech.join(' · ')}</p>
         </section>
+      </section>
+
+      <section class="cv__section">
+        <h2 class="cv__h2">個人開発</h2>
+        {cvProjects.map((project) => (
+          <section class="cv__role">
+            <h3 class="cv__role-title">{project.ja.name}</h3>
+            <p class="cv__role-summary">{project.ja.summary}</p>
+            <p class="cv__tech">{project.tech.join(' · ')}</p>
+          </section>
+        ))}
       </section>
 
       <section class="cv__section">

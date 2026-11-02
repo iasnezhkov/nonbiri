@@ -371,22 +371,28 @@ export const projects = [
   },
 ] as const;
 
+const CV_PROJECT_ORDER: readonly string[] = ['Gokaku', 'Suji'];
+
+export const cvProjects = [...projects].sort(
+  (a, b) => CV_PROJECT_ORDER.indexOf(a.name) - CV_PROJECT_ORDER.indexOf(b.name),
+);
+
 /**
  * Not an app, so not in `projects`: no store listing, and the two-apps copy on
  * /about would stop being true if it joined that list.
  */
 export const research = {
-  name: 'MindOne — device support for a MediaTek phone',
+  name: 'MindOne — Android 17 for a phone with no published source',
   href: '/mindone',
   reposLabel: 'github.com/iasnezhkov — kernel · device tree',
   summary:
-    'A retail Android phone on a MediaTek Helio G99, sold on Linux 5.10 with no published source for its kernel, device tree or hardware abstraction layers. Hand-ported it to Linux 6.12 by way of 6.1, rebuilding the device tree out of the stock compiled blob and carrying 339 out-of-tree driver trees, 290 of them loading on the running phone. Above the kernel, rewrote closed userspace in the open — an audio HAL, a sensors HAL and four HIDL→AIDL bridges — so the device can be tuned and carried onto later Android releases. Two repositories: the 6.12 kernel current, the 6.1 port archived. It is the phone I carry.',
-  tech: ['Linux 6.12', 'C', 'AArch64', 'Android GKI/KMI', 'Device Tree', 'Ghidra', 'AOSP', 'LineageOS'],
+    'Moved a retail MediaTek Helio G99 phone from its Android 12-generation vendor platform to Android 17 — the bring-up a phone maker does for a new release, done independently and without vendor source. Google’s android16-6.12 GKI core with the board’s drivers ported to it as vendor modules, a device tree rebuilt from the stock binary, and own AIDL services in place of closed HALs for audio, sensors, GNSS, camera and V4L2 video. Runs LineageOS 24 with everything working except the built-in virtual SIM; it is the phone I carry, and a public build is in preparation.',
+  tech: ['Linux 6.12', 'Android GKI', 'C', 'C++', 'Rust', 'AIDL', 'Device Tree', 'Kleaf', 'AOSP', 'LineageOS'],
   ja: {
-    name: 'MindOne — MediaTek 端末のデバイスサポート',
+    name: 'MindOne — ソース非公開の端末に Android 17 を',
     href: '/ja/mindone',
     summary:
-      'MediaTek Helio G99 を積んだ市販の Android 端末です。出荷時は Linux 5.10 で、カーネルもデバイスツリーも HAL もソースは公開されていませんでした。6.1 を経て Linux 6.12 まで手作業で移植し、デバイスツリーは出荷時のバイナリから復元。カーネル外のドライバは 339 ツリーあり、うち 290 モジュールが実機で読み込まれます。カーネルより上のクローズドな実装もオープンに書き直しています — 音声 HAL、センサー HAL、HIDL→AIDL ブリッジ 4 本。最適化の余地を残し、将来の Android にも載せるためです。公開は 2 リポジトリで、6.12 が現行、6.1 の移植はアーカイブ。普段使いの端末です。',
+      'MediaTek Helio G99 を積んだ市販の端末を、Android 12 世代のベンダー基盤から Android 17 へ移しました。メーカーが新しいリリースのたびに行うプラットフォームの立ち上げを、ベンダーのソースなしで独力で行ったものです。Google の android16-6.12 GKI コアに基板のドライバをベンダーモジュールとして移植し、デバイスツリーは出荷時のバイナリから復元。音声、センサー、GNSS、カメラ、V4L2 動画は、非公開の HAL に代わる自作の AIDL サービスです。LineageOS 24 で内蔵の仮想 SIM 以外はすべて動作し、普段使いの端末です。一般向けのビルドを準備中。',
   },
 } as const;
 

@@ -1,11 +1,11 @@
-export const updated = new Date('2026-11-02');
+export const updated = new Date('2026-11-06');
 
 export const keywords = [
   'iKKO MindOne',
   'Android 17',
   'LineageOS 24',
   'MediaTek Helio G99',
-  'Linux 6.12',
+  'Linux 6.18',
   'Android GKI',
 ] as const;
 
@@ -66,9 +66,9 @@ export const overview = [
 export const built = [
   {
     name: 'A current kernel',
-    scale: 'Linux 6.12 · Google GKI',
+    scale: 'Linux 6.18 · Google GKI',
     body: 'The kernel is the part of the system that talks directly to the hardware. The phone has moved from the old version it shipped with to Google’s current one, used as Google releases it, so Google’s security fixes reach it directly. Everything specific to the MindOne loads on top.',
-    ja: { name: '新しいカーネル', scale: 'Linux 6.12 · Google GKI', body: 'カーネルは、システムの中でハードウェアと直接やりとりする部分です。出荷時の古い版から、Google が配布する現在の版にそのまま移りました。だから Google のセキュリティ修正がそのまま届きます。MindOne に固有のものは、その上に読み込まれます。' },
+    ja: { name: '新しいカーネル', scale: 'Linux 6.18 · Google GKI', body: 'カーネルは、システムの中でハードウェアと直接やりとりする部分です。出荷時の古い版から、Google が配布する現在の版にそのまま移りました。だから Google のセキュリティ修正がそのまま届きます。MindOne に固有のものは、その上に読み込まれます。' },
   },
   {
     name: 'The hardware, described again',
@@ -134,14 +134,14 @@ export const repos = [
   {
     name: 'Device tree · lineage-24.0',
     href: 'https://github.com/iasnezhkov/android_device_ikko_mindone',
-    body: 'LineageOS 24 / Android 17: own AIDL services for audio, sensors, GNSS, the camera provider and the vibrator, in-tree V4L2 Codec2 video and Rust modem helpers, 64-bit only. The lineage-23.2 branch keeps Android 16.',
-    ja: { body: 'LineageOS 24 / Android 17。音声、センサー、GNSS、カメラプロバイダ、バイブレーターの自作 AIDL サービス、ツリー内の V4L2 Codec2 による動画、Rust によるモデム補助ツール。64 ビットのみ。lineage-23.2 ブランチには Android 16 版が残っています。' },
+    body: 'LineageOS 24 / Android 17: own AIDL services for audio, sensors, GNSS, the camera provider and the vibrator, in-tree V4L2 Codec2 video and Rust modem helpers, 64-bit only. The lineage-23.2 branch keeps Android 16 on Linux 6.12.',
+    ja: { body: 'LineageOS 24 / Android 17。音声、センサー、GNSS、カメラプロバイダ、バイブレーターの自作 AIDL サービス、ツリー内の V4L2 Codec2 による動画、Rust によるモデム補助ツール。64 ビットのみ。lineage-23.2 ブランチには Linux 6.12 の Android 16 版が残っています。' },
   },
   {
-    name: 'Kernel · android16-6.12',
+    name: 'Kernel · android17-6.18',
     href: 'https://github.com/iasnezhkov/android_kernel_ikko_mindone',
-    body: 'Device modules, DTB/DTBO and a Kleaf DDK build over Google’s android16-6.12 GKI core. The earlier android14-6.1 port is kept as history.',
-    ja: { body: 'Google の android16-6.12 GKI コアの上に載るデバイスモジュール、DTB/DTBO、Kleaf DDK のビルド。以前の android14-6.1 の移植は履歴として残しています。' },
+    body: 'Device modules, DTB/DTBO and a Kleaf DDK build over Google’s android17-6.18 GKI core. The previous android16-6.12 line and the earlier android14-6.1 port are kept.',
+    ja: { body: 'Google の android17-6.18 GKI コアの上に載るデバイスモジュール、DTB/DTBO、Kleaf DDK のビルド。以前の android16-6.12 系列と android14-6.1 の移植も残しています。' },
   },
 ] as const;
 

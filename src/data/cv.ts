@@ -386,13 +386,13 @@ export const research = {
   href: '/mindone',
   reposLabel: 'github.com/iasnezhkov — kernel · device tree',
   summary:
-    'Moved a retail MediaTek Helio G99 phone from its Android 12-generation vendor platform to Android 17 — the bring-up a phone maker does for a new release, done independently and without vendor source. Google’s android16-6.12 GKI core with the board’s drivers ported to it as vendor modules, a device tree rebuilt from the stock binary, and own AIDL services in place of closed HALs for audio, sensors, GNSS, camera and V4L2 video. Runs LineageOS 24 with everything working except the built-in virtual SIM; it is the phone I carry, and a public build is in preparation.',
-  tech: ['Linux 6.12', 'Android GKI', 'C', 'C++', 'Rust', 'AIDL', 'Device Tree', 'Kleaf', 'AOSP', 'LineageOS'],
+    'Moved a retail MediaTek Helio G99 phone from its Android 12-generation vendor platform to Android 17 — the bring-up a phone maker does for a new release, done independently and without vendor source. Google’s android17-6.18 GKI core with the board’s drivers ported to it as vendor modules, a device tree rebuilt from the stock binary, and own AIDL services in place of closed HALs for audio, sensors, GNSS, camera and V4L2 video. Runs LineageOS 24 with everything working except the built-in virtual SIM; it is the phone I carry, and a public build is in preparation.',
+  tech: ['Linux 6.18', 'Android GKI', 'C', 'C++', 'Rust', 'AIDL', 'Device Tree', 'Kleaf', 'AOSP', 'LineageOS'],
   ja: {
     name: 'MindOne — ソース非公開の端末に Android 17 を',
     href: '/ja/mindone',
     summary:
-      'MediaTek Helio G99 を積んだ市販の端末を、Android 12 世代のベンダー基盤から Android 17 へ移しました。メーカーが新しいリリースのたびに行うプラットフォームの立ち上げを、ベンダーのソースなしで独力で行ったものです。Google の android16-6.12 GKI コアに基板のドライバをベンダーモジュールとして移植し、デバイスツリーは出荷時のバイナリから復元。音声、センサー、GNSS、カメラ、V4L2 動画は、非公開の HAL に代わる自作の AIDL サービスです。LineageOS 24 で内蔵の仮想 SIM 以外はすべて動作し、普段使いの端末です。一般向けのビルドを準備中。',
+      'MediaTek Helio G99 を積んだ市販の端末を、Android 12 世代のベンダー基盤から Android 17 へ移しました。メーカーが新しいリリースのたびに行うプラットフォームの立ち上げを、ベンダーのソースなしで独力で行ったものです。Google の android17-6.18 GKI コアに基板のドライバをベンダーモジュールとして移植し、デバイスツリーは出荷時のバイナリから復元。音声、センサー、GNSS、カメラ、V4L2 動画は、非公開の HAL に代わる自作の AIDL サービスです。LineageOS 24 で内蔵の仮想 SIM 以外はすべて動作し、普段使いの端末です。一般向けのビルドを準備中。',
   },
 } as const;
 

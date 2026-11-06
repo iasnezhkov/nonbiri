@@ -53,7 +53,7 @@ Unofficial Android 17 for the iKKO MindOne, a card-sized phone on a MediaTek Hel
 that shipped with Android 15 on an Android 12-generation vendor platform, with no
 published source for its kernel, device tree or hardware layers. The whole stack was
 brought up to date from the hardware up, by one developer and from the outside: Google's
-android16-6.12 kernel core with the board's drivers ported to it, a device tree rebuilt
+android17-6.18 kernel core with the board's drivers ported to it, a device tree rebuilt
 from the stock binary, and open replacements for the closed audio, sensor, location,
 camera and video services. It runs LineageOS 24, and everything the phone can do works
 except the built-in virtual SIM.
